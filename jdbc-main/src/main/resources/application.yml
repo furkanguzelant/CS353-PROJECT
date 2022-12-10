@@ -1,15 +1,15 @@
-#app:
-#  datasource:
-#    main:
-#      driver-class-name: org.postgresql.Driver
-#      jdbc-url: jdbc:postgresql://localhost:5432/amigoscode
-#      username: amigoscode
-#      password: 'password'
-#      pool-size: 30
-#
-#server:
-#  error:
-#    include-binding-errors: always
-#    include-message: always
+app:
+  datasource:
+    main:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://db-postgresql-fra1-35802-do-user-13066244-0.b.db.ondigitalocean.com:25060/defaultdb
+      username: doadmin
+      password: AVNS_ksYCZW3va_AZiP5Lq8d
+      pool-size: 30
+
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
 
 
