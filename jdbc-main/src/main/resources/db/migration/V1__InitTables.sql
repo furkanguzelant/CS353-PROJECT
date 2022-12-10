@@ -27,6 +27,19 @@ CREATE TABLE admin(
                       userID int,
                       PRIMARY KEY (userID),
                       FOREIGN KEY (userID) REFERENCES users(userID)
-)
+);
+
+
+create table registeredCustomer (
+                                    userID      			int,
+                                    email            			varchar(320),
+                                    password      			varchar(64),
+                                    phoneNumber   		varchar(15),
+                                    PRIMARY KEY (userID),
+                                    FOREIGN KEY (userID) REFERENCES customer(userID),
+                                    UNIQUE (email),
+                                    UNIQUE (phoneNumber)
+);
+
 
 DROP TABLE customer;

@@ -2,6 +2,8 @@ package com.server.User;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -13,5 +15,13 @@ public class UserService {
 
     public void addCustomer(User user) {
         int result = userDao.insertCustomer(user);
+    }
+
+    public void addRegisteredCustomer(RegisteredCustomer registeredCustomer) {
+        int result = userDao.insertRegisteredCustomer(registeredCustomer);
+    }
+
+    public List<User> getCustomers() {
+        return userDao.selectCustomers();
     }
 }
