@@ -20,7 +20,6 @@ public class Courier extends Staff {
         this.status = status;
     }
 
-<<<<<<<<< Temporary merge branch 1
     public Courier(Integer userID, String name, LocalDate birthDate,String type, String email, String password, String phoneNumber, int salary, CourierStatus status) {
         super(userID, name, birthDate, type, email, password, phoneNumber, salary);
         this.status = status;
