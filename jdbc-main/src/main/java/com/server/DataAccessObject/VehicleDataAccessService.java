@@ -1,5 +1,7 @@
 package com.server.DataAccessObject;
 
+import com.server.Enums.PackageStatus;
+import com.server.ModelClass.Package;
 import com.server.ModelClass.Users.User;
 import com.server.ModelClass.Vehicle;
 import com.server.RowMappers.VehicleRowMapper;
@@ -52,9 +54,9 @@ public class VehicleDataAccessService implements VehicleDao {
                  """;
 
 
-       return jdbcTemplate.query(sql, new VehicleRowMapper(), licensePlate )
-               .stream()
-               .findFirst();
+        return jdbcTemplate.query(sql, new VehicleRowMapper(), licensePlate)
+                .stream()
+                .findFirst();
     }
 
     @Override
@@ -65,7 +67,37 @@ public class VehicleDataAccessService implements VehicleDao {
                 WHERE licensePlate = ?
                  """;
 
-        return jdbcTemplate.query(sql, new PackageRowMapper());
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+             return new Package(
+                    resultSet.getInt("packageID"),
+                    resultSet.getInt("weight"),
+                    resultSet.getInt("volume"),
+                    PackageStatus.fromInteger(
+                            resultSet.getInt("status")
+                    ),
+                    getTagsOfPackage(resultSet.getInt("packageID"))
+                    ,
+                    resultSet.getInt("senderAddressID"),
+                    resultSet.getInt("receiverAddressID"),
+                    resultSet.getInt("licencePlate"),
+                    resultSet.getInt("customerID"),
+                    resultSet.getInt("paymentID")
+            );
+        }
+        );
+
+    }
+
+    List<String> getTagsOfPackage(int packageID) {
+        var sql = """
+                SELECT distinct tag
+                FROM  package natural join package_tag
+                WHERE packageID = ?
+                 """;
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+                    return resultSet.getString("tag");
+                }
+        );
 
     }
 }
