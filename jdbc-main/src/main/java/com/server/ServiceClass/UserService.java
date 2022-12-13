@@ -20,8 +20,8 @@ public class UserService {
         int result = userDao.insertCustomer(user);
     }
 
-    public void addRegisteredCustomer(RegisteredCustomer registeredCustomer) {
-        int result = userDao.insertRegisteredCustomer(registeredCustomer);
+    public int addRegisteredCustomer(RegisteredCustomer registeredCustomer) {
+        return userDao.insertRegisteredCustomer(registeredCustomer);
     }
 
     public List<User> getCustomers() {

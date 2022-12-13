@@ -107,11 +107,12 @@ public class UserDataAccessService implements UserDao {
                 INSERT INTO registeredCustomer(userID, email, password, phoneNumber)
                 VALUES (?, ?, ?, ?);
                  """;
-        return jdbcTemplate.update(
+        jdbcTemplate.update(
                 sql,
                 id, registeredCustomer.getEmail(), registeredCustomer.getPassword(),
                 registeredCustomer.getPhoneNumber()
         );
+        return id;
     }
 
     public List<User> selectCustomers() {
