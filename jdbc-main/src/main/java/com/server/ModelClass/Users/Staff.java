@@ -19,8 +19,8 @@ public class Staff extends User {
         this.salary = salary;
     }
 
-    public Staff(Integer userID, String name, LocalDate birthDate, String type, String email, String password, String phoneNumber, int salary) {
-        super(userID, name, birthDate, type);
+    public Staff(String name, LocalDate birthDate, String type, String email, String password, String phoneNumber, int salary) {
+        super(name, birthDate, type);
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;

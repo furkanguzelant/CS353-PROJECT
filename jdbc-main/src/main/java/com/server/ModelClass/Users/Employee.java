@@ -8,6 +8,8 @@ public class Employee extends Staff {
 
     private int logisticUnitID;
 
+    public Employee() {}
+
     public Employee(int logisticUnitID) {
         this.logisticUnitID = logisticUnitID;
     }
@@ -17,9 +19,9 @@ public class Employee extends Staff {
         this.logisticUnitID = logisticUnitID;
     }
 
-    public Employee(Integer userID, String name, LocalDate birthDate, String type,
+    public Employee(String name, LocalDate birthDate, String type,
                     String email, String password, String phoneNumber, int salary, int logisticUnitID) {
-        super(userID, name, birthDate, type, email, password, phoneNumber, salary);
+        super(name, birthDate, type, email, password, phoneNumber, salary);
         this.logisticUnitID = logisticUnitID;
     }
 

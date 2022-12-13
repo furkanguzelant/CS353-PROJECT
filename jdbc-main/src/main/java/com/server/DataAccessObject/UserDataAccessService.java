@@ -136,7 +136,7 @@ public class UserDataAccessService implements UserDao {
     public int insertEmployee(Employee employee) {
         Integer id = insertStaff(employee);
         String sql = """
-                INSERT INTO employee(userID, email)
+                INSERT INTO employee(userID, logisticUnitID)
                 VALUES (?, ?);
                  """;
         return jdbcTemplate.update(
