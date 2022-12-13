@@ -48,9 +48,6 @@ public class UserDataAccessService implements UserDao {
             user = (Staff) jdbcTemplate.queryForObject(sql,
                     new BeanPropertyRowMapper(Staff.class),
                     new Object[]{email, password});
-
-            if(user == null)
-                return null;
         }
         return user;
     }
@@ -62,8 +59,8 @@ public class UserDataAccessService implements UserDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         String sql = """
-                INSERT INTO users(name, birthdate)
-                VALUES (?, ?);
+                INSERT INTO users(name, birthdate, type)
+                VALUES (?, ?, ?);
                  """;
         String finalSql = sql;
         jdbcTemplate.update(conn -> {
@@ -74,6 +71,7 @@ public class UserDataAccessService implements UserDao {
             // Set parameters
             preparedStatement.setString(1, user.getName());
             preparedStatement.setObject(2, user.getBirthDate());
+            preparedStatement.setString(3, user.getType());
 
             return preparedStatement;
 
