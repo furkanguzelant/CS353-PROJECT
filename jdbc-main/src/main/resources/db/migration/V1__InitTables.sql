@@ -109,7 +109,12 @@ create table vehicle(
                         status 				int,
                         maxWeight 			int,
                         currentWeight		int,
-                        PRIMARY KEY (licensePlate)
+                        courierID		    int,
+                        addressID           int,
+
+                        PRIMARY KEY (licensePlate),
+                        FOREIGN KEY (courierID) REFERENCES courier(userID),
+                        FOREIGN KEY (addressID) REFERENCES address(addressID)
 );
 
 create table package(
@@ -199,13 +204,6 @@ create table branch(
     distributionCenter(logisticUnitID)
 );
 
-create table vehicle_address(
-    licensePlate			varchar(10),
-    addressID			    int,
-    PRIMARY KEY (licensePlate),
-    FOREIGN KEY (licensePlate) REFERENCES vehicle(licensePlate),
-    FOREIGN KEY (addressID) REFERENCES address(addressID)
-);
 
 create table deliver(
     packageID			int,
@@ -238,10 +236,3 @@ create table logisticUnit_storage(
      FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID)
 );
 
-create table courier_vehicle(
-    courierID				    int,
-    licensePlate				varchar(10) UNIQUE,
-    PRIMARY KEY (courierID),
-    FOREIGN KEY (courierID) REFERENCES courier(userID),
-    FOREIGN KEY (licensePlate) REFERENCES vehicle(licensePlate)
-);

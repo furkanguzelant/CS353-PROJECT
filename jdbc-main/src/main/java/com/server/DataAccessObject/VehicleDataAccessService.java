@@ -1,17 +1,19 @@
 package com.server.DataAccessObject;
 
 import com.server.Enums.PackageStatus;
+import com.server.Enums.VehicleStatus;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Users.User;
 import com.server.ModelClass.Vehicle;
 import com.server.RowMappers.VehicleRowMapper;
 import com.server.Utility.UserRoleConstraints;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public class VehicleDataAccessService implements VehicleDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -22,6 +24,7 @@ public class VehicleDataAccessService implements VehicleDao {
 
     @Override
     public void insertVehicle(Vehicle vehicle) {
+
         String sql = """
                 INSERT INTO vehicle(licensePlate,status,maxWeight,currentWeight)
                 VALUES (?,?,?,?);
@@ -29,7 +32,7 @@ public class VehicleDataAccessService implements VehicleDao {
         jdbcTemplate.update(
                 sql,
                 vehicle.getLicensePlate(),
-                vehicle.getStatus(),
+                VehicleStatus.toInteger(vehicle.getStatus()),
                 vehicle.getMaxWeight(),
                 vehicle.getCurrentWeight()
         );
@@ -39,7 +42,7 @@ public class VehicleDataAccessService implements VehicleDao {
     public List<Vehicle> selectAllVehicles() {
         var sql = """
                 SELECT *
-                FROM vehicle natural join courier_vehicle natural join vehicle_address
+                FROM vehicle
                  """;
 
         return jdbcTemplate.query(sql, new VehicleRowMapper());

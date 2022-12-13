@@ -11,4 +11,12 @@ public enum VehicleStatus {
             default -> null;
         };
     }
+
+    public static int toInteger(VehicleStatus status){
+        return switch (status){
+
+            case Busy -> 0;
+            case Available -> 1;
+        };
+    }
 }

@@ -18,9 +18,7 @@ public class VehicleRowMapper implements RowMapper<Vehicle> {
                         resultSet.getInt("status")
                 ),
                 resultSet.getInt("maxWeight"),
-                resultSet.getInt("currentWeight"),
-                resultSet.getInt("courierID"),
-                resultSet.getInt("addressID")
+                resultSet.getInt("currentWeight")
         );
     }
 }
