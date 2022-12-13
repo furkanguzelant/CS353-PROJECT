@@ -5,6 +5,7 @@ import com.server.ModelClass.Package;
 import com.server.ModelClass.Users.User;
 import com.server.ModelClass.Vehicle;
 import com.server.RowMappers.VehicleRowMapper;
+import com.server.Utility.UserRoleConstraints;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
@@ -68,7 +69,7 @@ public class VehicleDataAccessService implements VehicleDao {
                  """;
 
         return jdbcTemplate.query(sql, (resultSet, i) -> {
-             return new Package(
+            return new Package(
                     resultSet.getInt("packageID"),
                     resultSet.getInt("weight"),
                     resultSet.getInt("volume"),
@@ -83,8 +84,7 @@ public class VehicleDataAccessService implements VehicleDao {
                     resultSet.getInt("customerID"),
                     resultSet.getInt("paymentID")
             );
-        }
-        );
+        });
 
     }
 
