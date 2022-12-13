@@ -1,3 +1,29 @@
+DROP TABLE IF EXISTS package_tag;
+DROP TABLE IF EXISTS step;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS package;
+DROP TABLE IF EXISTS customer_complaint;
+DROP TABLE IF EXISTS registeredCustomer;
+DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS courier;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS staff;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS vehicle;
+DROP TABLE IF EXISTS logisticUnit;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS storage;
+DROP TABLE IF EXISTS branch;
+DROP TABLE IF EXISTS distributionCenter;
+DROP TABLE IF EXISTS vehicle_address;
+DROP TABLE IF EXISTS deliver;
+DROP TABLE IF EXISTS customer_address;
+DROP TABLE IF EXISTS package_storage;
+DROP TABLE IF EXISTS logisticUnit_storage;
+DROP TABLE IF EXISTS courier_vehicle;
+
 CREATE TABLE users(
     userID    SERIAL NOT NULL,
     name      varchar(64),
@@ -41,6 +67,24 @@ create table registeredCustomer(
     UNIQUE (phoneNumber)
 );
 
+create table address(
+                        addressID				SERIAL,
+                        country				    varchar(255),
+                        city					varchar(255),
+                        district				varchar(255),
+                        zipcode				    int,
+                        addressInfo				varchar(255),
+                        PRIMARY KEY (addressID)
+);
+
+create table logisticUnit(
+                             logisticUnitID		int,
+                             name			    varchar(30),
+                             addressID           int,
+                             FOREIGN KEY (addressID) REFERENCES address(addressID),
+                             PRIMARY KEY (logisticUnitID)
+);
+
 create table courier(
     userID       		    int,
     status           		varchar(10),
@@ -75,7 +119,7 @@ create table package(
     status 				    varchar(255),
     senderAddressID		    int,
     receiverAddressID		int,
-    licensePlate			int,
+    licensePlate			varchar(10),
     senderID			    int,
     receiverID			    int,
     PRIMARY KEY (packageID),
@@ -84,16 +128,6 @@ create table package(
     FOREIGN KEY (licensePlate) 	     REFERENCES vehicle(licensePlate),
     FOREIGN KEY (receiverID) 	     REFERENCES customer(userID),
     FOREIGN KEY (senderID)	    	 REFERENCES   registeredCustomer(userID)
-);
-
-create table address(
-    addressID				SERIAL,
-    country				    varchar(255),
-    city					varchar(255),
-    district				varchar(255),
-    zipcode				    int,
-    addressInfo				varchar(255),
-    PRIMARY KEY (addressID)
 );
 
 create table tag(
@@ -149,10 +183,10 @@ create table storage(
     PRIMARY KEY (storageID)
 );
 
-create table logisticUnit(
-    logisticUnitID		int,
-    name			    varchar(30),
-    PRIMARY KEY (logisticUnitID)
+create table distributionCenter(
+                                   logisticUnitID		int,
+                                   PRIMARY KEY (logisticUnitID),
+                                   FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID)
 );
 
 create table branch(
@@ -162,12 +196,6 @@ create table branch(
     FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID),
     FOREIGN KEY (distributionCenterID) REFERENCES
     distributionCenter(logisticUnitID)
-);
-
-create table distributionCenter(
-     logisticUnitID		int,
-     PRIMARY KEY (logisticUnitID),
-     FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID)
 );
 
 create table vehicle_address(
@@ -201,15 +229,6 @@ create table package_storage(
     FOREIGN KEY (packageID) REFERENCES package(packageID),
     FOREIGN KEY (storageID) REFERENCES storage(storageID)
 );
-
-create table logisticUnit_address(
-    logisticUnitID			int,
-    addressID			int,
-    PRIMARY KEY (logisticUnitID),
-    FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID),
-    FOREIGN KEY (addressID) REFERENCES address(addressID)
-);
-
 create table logisticUnit_storage(
      storageID			    int,
      logisticUnitID			int,
@@ -225,16 +244,3 @@ create table courier_vehicle(
     FOREIGN KEY (courierID) REFERENCES courier(userID),
     FOREIGN KEY (licensePlate) REFERENCES vehicle(licensePlate)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-DROP TABLE customer;
