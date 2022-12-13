@@ -26,18 +26,18 @@ public class UserDataAccessService implements UserDao {
     @Override
     public User getUserByEmailAndPassword(String email, String password) {
 
-        User user;
+        List<User> users;
         var sql = """
                 SELECT *
                 FROM registeredCustomer natural join users
                 WHERE email = ? AND password = ?
                  """;
 
-        user = (RegisteredCustomer) jdbcTemplate.queryForObject(sql,
+        users = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(RegisteredCustomer.class),
-                new Object[]{email, password});
+                email, password);
 
-        if(user == null) {
+        if(users.size() == 0) {
 
             sql = """
                 SELECT *
@@ -45,11 +45,12 @@ public class UserDataAccessService implements UserDao {
                 WHERE email = ? AND password = ?
                  """;
 
-            user = (Staff) jdbcTemplate.queryForObject(sql,
+            users = jdbcTemplate.query(sql,
                     new BeanPropertyRowMapper(Staff.class),
-                    new Object[]{email, password});
+                    email, password);
+
         }
-        return user;
+        return users.get(0);
     }
 
 
