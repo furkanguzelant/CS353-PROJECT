@@ -1,9 +1,10 @@
 package com.server.Authorization;
 
-import com.server.User.UserDao;
-import com.server.User.UserDataAccessService;
+import com.server.ModelClass.User;
+import com.server.DataAccessObject.UserDao;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -17,6 +18,10 @@ public class AuthorizationService {
     }
 
     public Map<String, Object> authenticateAccount(String email, String password) {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        User user = userDao.getUserByEmailAndPassword( email, password);
+
         return null;
     }
 }
