@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.server.ModelClass.*;
 import com.server.DataAccessObject.UserDao;
+import com.server.ModelClass.Users.*;
 import com.server.Utility.UserRoleConstraints;
 import org.springframework.stereotype.Service;
 
