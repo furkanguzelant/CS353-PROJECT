@@ -6,19 +6,19 @@ public class User {
     private Integer userID;
     private String name;
     private LocalDate birthDate;
+    private String type;
 
-    public User() {
-    }
-
-    public User(Integer userID, String name, LocalDate birthDate) {
+    public User(Integer userID, String name, LocalDate birthDate, String type) {
         this.userID = userID;
         this.name = name;
         this.birthDate = birthDate;
+        this.type = type;
     }
 
-    public User(String name, LocalDate birthDate) {
+    public User(String name, LocalDate birthDate, String type) {
         this.name = name;
         this.birthDate = birthDate;
+        this.type = type;
     }
 
     public Integer getUserID() {
@@ -43,5 +43,13 @@ public class User {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

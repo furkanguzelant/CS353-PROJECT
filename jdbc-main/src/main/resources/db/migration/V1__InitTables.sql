@@ -1,33 +1,34 @@
 DROP TABLE IF EXISTS package_tag;
 DROP TABLE IF EXISTS step;
 DROP TABLE IF EXISTS payment;
-DROP TABLE IF EXISTS package;
+DROP TABLE IF EXISTS package_storage;
+DROP TABLE IF EXISTS deliver;
 DROP TABLE IF EXISTS customer_complaint;
+DROP TABLE IF EXISTS package;
 DROP TABLE IF EXISTS registeredCustomer;
+DROP TABLE IF EXISTS customer_address;
+DROP TABLE IF EXISTS vehicle_address;
+DROP TABLE IF EXISTS logisticUnit_storage;
+DROP TABLE IF EXISTS branch;
+DROP TABLE IF EXISTS distributionCenter;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS courier_vehicle;
+DROP TABLE IF EXISTS courier;
+DROP TABLE IF EXISTS logisticUnit;
+DROP TABLE IF EXISTS address;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS courier;
-DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS staff;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS vehicle;
-DROP TABLE IF EXISTS logisticUnit;
-DROP TABLE IF EXISTS address;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS storage;
-DROP TABLE IF EXISTS branch;
-DROP TABLE IF EXISTS distributionCenter;
-DROP TABLE IF EXISTS vehicle_address;
-DROP TABLE IF EXISTS deliver;
-DROP TABLE IF EXISTS customer_address;
-DROP TABLE IF EXISTS package_storage;
-DROP TABLE IF EXISTS logisticUnit_storage;
-DROP TABLE IF EXISTS courier_vehicle;
 
 CREATE TABLE users(
     userID    SERIAL NOT NULL,
     name      varchar(64),
     birthDate date,
+    type      varchar(2),
     PRIMARY KEY (userID)
 );
 

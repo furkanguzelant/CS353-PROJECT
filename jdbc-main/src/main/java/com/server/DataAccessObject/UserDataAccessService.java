@@ -1,7 +1,8 @@
 package com.server.DataAccessObject;
 
-import com.server.ModelClass.Users.RegisteredCustomer;
-import com.server.ModelClass.Users.User;
+import com.server.ModelClass.Users.*;
+import com.server.Utility.UserRoleConstraints;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class UserDataAccessService implements UserDao {
@@ -23,8 +25,37 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public User getUserByEmailAndPassword(String email, String password) {
-        return null;
+
+        User user;
+        var sql = """
+                SELECT *
+                FROM registeredCustomer natural join users
+                WHERE email = ? AND password = ?
+                 """;
+
+        user = (RegisteredCustomer) jdbcTemplate.queryForObject(sql,
+                new BeanPropertyRowMapper(RegisteredCustomer.class),
+                new Object[]{email, password});
+
+        if(user == null) {
+
+            sql = """
+                SELECT *
+                FROM staff natural join users
+                WHERE email = ? AND password = ?
+                 """;
+
+            user = (Staff) jdbcTemplate.queryForObject(sql,
+                    new BeanPropertyRowMapper(Staff.class),
+                    new Object[]{email, password});
+
+            if(user == null)
+                return null;
+        }
+        return user;
     }
+
+
 
     // Returns id of inserted user
     public int insertUser(User user) {
@@ -93,8 +124,8 @@ public class UserDataAccessService implements UserDao {
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             return new User(resultSet.getInt("userID"),
                     resultSet.getString("name"),
-                    LocalDate.parse(resultSet.getString("birthDate"))
-            );
+                    LocalDate.parse(resultSet.getString("birthDate")),
+                    UserRoleConstraints.UNREGISTERED_CUSTOMER_TYPE);
         });
     }
 
