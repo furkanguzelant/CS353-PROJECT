@@ -1,5 +1,6 @@
 package com.server.DataAccessObject;
 
+import com.server.ModelClass.Package;
 import com.server.ModelClass.Vehicle;
 
 import java.util.List;
