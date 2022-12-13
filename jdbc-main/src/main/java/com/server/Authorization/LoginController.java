@@ -3,6 +3,7 @@ package com.server.Authorization;
 import com.server.ModelClass.Address;
 import com.server.ModelClass.Users.RegisteredCustomer;
 import com.server.ModelClass.Users.User;
+import com.server.ServiceClass.AddressService;
 import com.server.ServiceClass.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,12 @@ import java.util.Map;
 public class LoginController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
+    private final AddressService addressService;
 
-    public LoginController(AuthenticationService authenticationService, UserService userService) {
+    public LoginController(AuthenticationService authenticationService, UserService userService, AddressService addressService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
+        this.addressService = addressService;
     }
 
     @PostMapping(path = "/login")
@@ -34,18 +37,28 @@ public class LoginController {
         return new ResponseEntity<>(returnMap, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/register")
-    public User register(@RequestBody RegisterRequestBody registerRequestBody){
-        int userId = userService.addRegisteredCustomer( registerRequestBody.registeredCustomer );
-        // todo address service
-        // todo create an instance into the customer_address
-
-        return null;
+    @PostMapping(path = "/registerCustomer")
+    public ResponseEntity<Map<String, Object>> register(@RequestBody RegisterRequestBody registerRequestBody){
+        try {
+            int customerId = userService.addRegisteredCustomer( registerRequestBody.registeredCustomer );
+            int addressId = addressService.insertAddress(registerRequestBody.address);
+            addressService.bindAddressToCustomer(addressId,customerId);
+        }
+        catch ( Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Registeration Failed!"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(Map.of("statusMessage", "Successfully Registered."), HttpStatus.OK);
     }
 
     private static class RegisterRequestBody{
         private RegisteredCustomer registeredCustomer;
         private Address address;
+
+        public RegisterRequestBody(RegisteredCustomer registeredCustomer, Address address) {
+            this.registeredCustomer = registeredCustomer;
+            this.address = address;
+        }
     }
 
 }
