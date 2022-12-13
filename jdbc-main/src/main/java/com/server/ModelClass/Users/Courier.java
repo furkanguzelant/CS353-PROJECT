@@ -8,16 +8,19 @@ import java.time.LocalDate;
 public class Courier extends Staff {
 
     private CourierStatus status;
+    private int logisticUnitID;
 
     public Courier() {}
 
-    public Courier(CourierStatus status) {
+    public Courier(CourierStatus status, int logisticUnitID) {
         this.status = status;
+        this.logisticUnitID = logisticUnitID;
     }
 
-    public Courier(String email, String password, String phoneNumber, int salary, CourierStatus status) {
+    public Courier(String email, String password, String phoneNumber, int salary, CourierStatus status, int logisticUnitID) {
         super(email, password, phoneNumber, salary);
         this.status = status;
+        this.logisticUnitID = logisticUnitID;
     }
 
     public Courier(Integer userID, String name, LocalDate birthDate,String type, String email, String password, String phoneNumber, int salary, CourierStatus status) {
@@ -31,5 +34,13 @@ public class Courier extends Staff {
 
     public void setStatus(CourierStatus status) {
         this.status = status;
+    }
+
+    public int getLogisticUnitID() {
+        return logisticUnitID;
+    }
+
+    public void setLogisticUnitID(int logisticUnitID) {
+        this.logisticUnitID = logisticUnitID;
     }
 }

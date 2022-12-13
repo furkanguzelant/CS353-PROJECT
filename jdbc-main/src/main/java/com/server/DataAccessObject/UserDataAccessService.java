@@ -26,18 +26,18 @@ public class UserDataAccessService implements UserDao {
     @Override
     public User getUserByEmailAndPassword(String email, String password) {
 
-        User user;
+        List<User> users;
         var sql = """
                 SELECT *
                 FROM registeredCustomer natural join users
                 WHERE email = ? AND password = ?
                  """;
 
-        user = (RegisteredCustomer) jdbcTemplate.queryForObject(sql,
+        users = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(RegisteredCustomer.class),
-                new Object[]{email, password});
+                email, password);
 
-        if(user == null) {
+        if(users.size() == 0) {
 
             sql = """
                 SELECT *
@@ -45,11 +45,14 @@ public class UserDataAccessService implements UserDao {
                 WHERE email = ? AND password = ?
                  """;
 
-            user = (Staff) jdbcTemplate.queryForObject(sql,
+            users = jdbcTemplate.query(sql,
                     new BeanPropertyRowMapper(Staff.class),
-                    new Object[]{email, password});
+                    email, password);
+
         }
-        return user;
+        if(users.size() == 0)
+            return null;
+        return users.get(0);
     }
 
 
@@ -113,6 +116,46 @@ public class UserDataAccessService implements UserDao {
                 registeredCustomer.getPhoneNumber()
         );
         return id;
+    }
+
+    public int insertStaff(Staff staff) {
+        Integer id = insertUser(staff);
+        String sql = """
+                INSERT INTO staff(userID, email, password, phoneNumber, salary)
+                VALUES (?, ?, ?, ?, ?);
+                 """;
+        jdbcTemplate.update(
+                sql,
+                id, staff.getEmail(), staff.getPassword(),
+                staff.getPhoneNumber(), staff.getSalary()
+        );
+        return id;
+
+    }
+
+    @Override
+    public int insertEmployee(Employee employee) {
+        Integer id = insertStaff(employee);
+        String sql = """
+                INSERT INTO employee(userID, email)
+                VALUES (?, ?);
+                 """;
+        return jdbcTemplate.update(
+                sql,
+                id, employee.getLogisticUnitID()
+        );
+    }
+
+    public int insertCourier(Courier courier) {
+        Integer id = insertStaff(courier);
+        String sql = """
+                INSERT INTO courier(userID, status, logisticUnitID)
+                VALUES (?, ?, ?);
+                 """;
+        return jdbcTemplate.update(
+                sql,
+                id, courier.getStatus(), courier.getLogisticUnitID()
+        );
     }
 
     public List<User> selectCustomers() {
