@@ -7,12 +7,10 @@ DROP TABLE IF EXISTS customer_complaint;
 DROP TABLE IF EXISTS package;
 DROP TABLE IF EXISTS registeredCustomer;
 DROP TABLE IF EXISTS customer_address;
-DROP TABLE IF EXISTS vehicle_address;
 DROP TABLE IF EXISTS logisticUnit_storage;
 DROP TABLE IF EXISTS branch;
 DROP TABLE IF EXISTS distributionCenter;
 DROP TABLE IF EXISTS employee;
-DROP TABLE IF EXISTS courier_vehicle;
 DROP TABLE IF EXISTS courier;
 DROP TABLE IF EXISTS logisticUnit;
 DROP TABLE IF EXISTS address;
@@ -109,7 +107,12 @@ create table vehicle(
                         status 				int,
                         maxWeight 			int,
                         currentWeight		int,
-                        PRIMARY KEY (licensePlate)
+                        courierID		    int,
+                        addressID           int,
+
+                        PRIMARY KEY (licensePlate),
+                        FOREIGN KEY (courierID) REFERENCES courier(userID),
+                        FOREIGN KEY (addressID) REFERENCES address(addressID)
 );
 
 create table package(
@@ -199,13 +202,6 @@ create table branch(
     distributionCenter(logisticUnitID)
 );
 
-create table vehicle_address(
-    licensePlate			varchar(10),
-    addressID			    int,
-    PRIMARY KEY (licensePlate),
-    FOREIGN KEY (licensePlate) REFERENCES vehicle(licensePlate),
-    FOREIGN KEY (addressID) REFERENCES address(addressID)
-);
 
 create table deliver(
     packageID			int,
@@ -238,10 +234,3 @@ create table logisticUnit_storage(
      FOREIGN KEY (logisticUnitID) REFERENCES logisticUnit(logisticUnitID)
 );
 
-create table courier_vehicle(
-    courierID				    int,
-    licensePlate				varchar(10) UNIQUE,
-    PRIMARY KEY (courierID),
-    FOREIGN KEY (courierID) REFERENCES courier(userID),
-    FOREIGN KEY (licensePlate) REFERENCES vehicle(licensePlate)
-);

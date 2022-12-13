@@ -27,6 +27,13 @@ public class Vehicle {
         this.addressID = addressID;
     }
 
+    public Vehicle(String licensePlate, VehicleStatus status, int maxWeight, int currentWeight) {
+        this.licensePlate = licensePlate;
+        this.status = status;
+        this.maxWeight = maxWeight;
+        this.currentWeight = currentWeight;
+    }
+
     //Getter - Setters
 
     public String getLicensePlate() {
