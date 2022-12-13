@@ -1,7 +1,7 @@
 package com.server.ControllerClass;
 
-import com.server.ModelClass.RegisteredCustomer;
-import com.server.ModelClass.User;
+import com.server.ModelClass.Users.RegisteredCustomer;
+import com.server.ModelClass.Users.User;
 import com.server.ServiceClass.UserService;
 import org.springframework.web.bind.annotation.*;
 

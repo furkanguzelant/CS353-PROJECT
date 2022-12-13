@@ -1,8 +1,10 @@
-package com.server.ModelClass;
+package com.server.ModelClass.Users;
+
+import com.server.ModelClass.Users.User;
 
 import java.time.LocalDate;
 
-public class Staff extends User{
+public class Staff extends User {
 
     private String email;
     private String password;

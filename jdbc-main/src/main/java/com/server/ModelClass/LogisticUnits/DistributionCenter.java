@@ -1,4 +1,6 @@
-package com.server.ModelClass;
+package com.server.ModelClass.LogisticUnits;
+
+import com.server.ModelClass.LogisticUnits.LogisticUnit;
 
 public class DistributionCenter extends LogisticUnit {
 

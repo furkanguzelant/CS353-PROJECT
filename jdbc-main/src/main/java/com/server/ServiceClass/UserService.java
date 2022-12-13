@@ -1,8 +1,8 @@
 package com.server.ServiceClass;
 
 import com.server.DataAccessObject.UserDao;
-import com.server.ModelClass.RegisteredCustomer;
-import com.server.ModelClass.User;
+import com.server.ModelClass.Users.RegisteredCustomer;
+import com.server.ModelClass.Users.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
