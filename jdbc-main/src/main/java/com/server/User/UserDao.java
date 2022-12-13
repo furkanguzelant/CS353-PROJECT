@@ -7,5 +7,6 @@ public interface UserDao {
     int insertCustomer(User user);
     int insertRegisteredCustomer(RegisteredCustomer registeredCustomer);
     List<User> selectCustomers();
+    User getUserByEmailAndPassword( String email, String password);
 
 }
