@@ -1,7 +1,7 @@
 package com.server.DataAccessObject;
 
-import com.server.ModelClass.RegisteredCustomer;
-import com.server.ModelClass.User;
+import com.server.ModelClass.Users.RegisteredCustomer;
+import com.server.ModelClass.Users.User;
 
 import java.util.List;
 

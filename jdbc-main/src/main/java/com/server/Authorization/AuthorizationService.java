@@ -1,6 +1,6 @@
 package com.server.Authorization;
 
-import com.server.ModelClass.User;
+import com.server.ModelClass.Users.User;
 import com.server.DataAccessObject.UserDao;
 import org.springframework.stereotype.Service;
 

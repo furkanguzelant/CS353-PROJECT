@@ -1,4 +1,4 @@
-package com.server.ModelClass;
+package com.server.ModelClass.LogisticUnits;
 
 public class Branch extends LogisticUnit {
 

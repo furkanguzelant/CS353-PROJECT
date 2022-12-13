@@ -1,8 +1,7 @@
 package com.server.DataAccessObject;
 
-import com.server.DataAccessObject.UserDao;
-import com.server.ModelClass.RegisteredCustomer;
-import com.server.ModelClass.User;
+import com.server.ModelClass.Users.RegisteredCustomer;
+import com.server.ModelClass.Users.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;

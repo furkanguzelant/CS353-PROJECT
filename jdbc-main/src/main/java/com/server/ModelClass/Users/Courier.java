@@ -1,8 +1,10 @@
-package com.server.ModelClass;
+package com.server.ModelClass.Users;
+
+import com.server.ModelClass.Users.Staff;
 
 import java.time.LocalDate;
 
-public class Courier extends Staff{
+public class Courier extends Staff {
 
     enum Status {AVAILABLE, IN_DISTRIBUTION};
     private Status status;

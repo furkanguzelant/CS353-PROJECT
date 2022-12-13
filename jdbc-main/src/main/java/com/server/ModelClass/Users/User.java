@@ -1,4 +1,4 @@
-package com.server.ModelClass;
+package com.server.ModelClass.Users;
 import java.time.LocalDate;
 
 public class User {
