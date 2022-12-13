@@ -6,6 +6,7 @@ import com.server.ServiceClass.VehicleService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/vehicle")
@@ -25,6 +26,11 @@ public class VehicleController {
     @GetMapping(path="getVehicles")
     public List<Vehicle> selectAllVehicles(){
         return vehicleService.selectAllVehicles();
+    }
+
+    @GetMapping(path = "getVehicleByLicensePlate")
+    public Optional<Vehicle> getVehicleByLicensePlate(String licensePlate){
+        return vehicleService.getVehicleByLicensePlate(licensePlate);
     }
 
 }
