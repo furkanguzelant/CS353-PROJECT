@@ -20,6 +20,11 @@ public class UserDataAccessService implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
+    public User getUserByEmailAndPassword(String email, String password) {
+        return null;
+    }
+
     // Returns id of inserted user
     public int insertUser(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
