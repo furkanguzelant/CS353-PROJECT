@@ -1,11 +1,13 @@
-package com.server.User;
+package com.server.DataAccessObject;
 
+import com.server.DataAccessObject.UserDao;
+import com.server.ModelClass.RegisteredCustomer;
+import com.server.ModelClass.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;

@@ -1,4 +1,7 @@
-package com.server.User;
+package com.server.DataAccessObject;
+
+import com.server.ModelClass.RegisteredCustomer;
+import com.server.ModelClass.User;
 
 import java.util.List;
 
