@@ -1,27 +1,18 @@
 package com.server.Authorization;
 
-import com.server.ModelClass.User;
-import com.server.DataAccessObject.UserDao;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-
-
-@Service
 public class AuthorizationService {
-    private final UserDao userDao ;
-    private final String key = "asfdasfdasdfasfasdfsdafadfasdfasdfasdfasfasdf";
+    private static AuthorizationService authorizer;
+    private String key = "cancancancanyılmaz";
 
-    public AuthorizationService(UserDao userDao) {
-        this.userDao = userDao;
+    public static AuthorizationService getInstance() {
+        if(authorizer == null) {
+            authorizer = new AuthorizationService();
+        }
+        return authorizer;
     }
 
-    public Map<String, Object> authenticateAccount(String email, String password) {
-        Map<String, Object> returnMap = new HashMap<>();
 
-        User user = userDao.getUserByEmailAndPassword( email, password);
 
-        return null;
-    }
+
+
 }
