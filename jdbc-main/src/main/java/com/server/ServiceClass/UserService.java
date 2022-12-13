@@ -27,4 +27,8 @@ public class UserService {
     public List<User> getCustomers() {
         return userDao.selectCustomers();
     }
+
+    public User getUserByEmailAndPassword(String email, String password) {
+        return userDao.getUserByEmailAndPassword(email, password);
+    }
 }
