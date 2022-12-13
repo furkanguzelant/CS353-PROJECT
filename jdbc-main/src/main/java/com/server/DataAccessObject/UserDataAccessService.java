@@ -50,6 +50,8 @@ public class UserDataAccessService implements UserDao {
                     email, password);
 
         }
+        if(users.size() == 0)
+            return null;
         return users.get(0);
     }
 
@@ -112,6 +114,46 @@ public class UserDataAccessService implements UserDao {
                 sql,
                 id, registeredCustomer.getEmail(), registeredCustomer.getPassword(),
                 registeredCustomer.getPhoneNumber()
+        );
+    }
+
+    public int insertStaff(Staff staff) {
+        Integer id = insertUser(staff);
+        String sql = """
+                INSERT INTO staff(userID, email, password, phoneNumber, salary)
+                VALUES (?, ?, ?, ?, ?);
+                 """;
+        jdbcTemplate.update(
+                sql,
+                id, staff.getEmail(), staff.getPassword(),
+                staff.getPhoneNumber(), staff.getSalary()
+        );
+        return id;
+
+    }
+
+    @Override
+    public int insertEmployee(Employee employee) {
+        Integer id = insertStaff(employee);
+        String sql = """
+                INSERT INTO employee(userID, email)
+                VALUES (?, ?);
+                 """;
+        return jdbcTemplate.update(
+                sql,
+                id, employee.getLogisticUnitID()
+        );
+    }
+
+    public int insertCourier(Courier courier) {
+        Integer id = insertStaff(courier);
+        String sql = """
+                INSERT INTO courier(userID, status, logisticUnitID)
+                VALUES (?, ?, ?);
+                 """;
+        return jdbcTemplate.update(
+                sql,
+                id, courier.getStatus(), courier.getLogisticUnitID()
         );
     }
 
