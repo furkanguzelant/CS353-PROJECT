@@ -1,13 +1,12 @@
 package com.server.ModelClass;
 
+import com.server.Enums.VehicleStatus;
+
 public class Vehicle {
 
     private String licensePlate;
-    enum Status{
-        Busy,
-        Waiting
-    }
-    private Status status;
+
+    private VehicleStatus status;
     private int maxWeight;
     private int currentWeight;
 
@@ -19,10 +18,11 @@ public class Vehicle {
     private Integer addressID;
 
     //Constructor
-    public Vehicle(String licensePlate, Status status, int maxWeight, Integer courierID, Integer addressID ) {
+    public Vehicle(String licensePlate, VehicleStatus status, int maxWeight, int currentWeight, Integer courierID, Integer addressID ) {
         this.licensePlate = licensePlate;
         this.status = status;
         this.maxWeight = maxWeight;
+        this.currentWeight = currentWeight;
         this.courierID = courierID;
         this.addressID = addressID;
     }
@@ -37,11 +37,11 @@ public class Vehicle {
         this.licensePlate = licensePlate;
     }
 
-    public Status getStatus() {
+    public VehicleStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(VehicleStatus status) {
         this.status = status;
     }
 

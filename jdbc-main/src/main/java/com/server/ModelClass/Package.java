@@ -1,5 +1,7 @@
 package com.server.ModelClass;
 
+import com.server.Enums.PackageStatus;
+
 import java.util.List;
 
 public class Package {
@@ -7,12 +9,11 @@ public class Package {
     public Package() {
     }
 
-    enum Status {Delivered, InDistribution, InBranch}
 
     private int packageID;
     private int weight;
     private int volume;
-    private Status status;
+    private PackageStatus status;
     private List<String> tags;
     private int senderAddressID;
     private int receiverAddressID;
@@ -23,7 +24,7 @@ public class Package {
     public Package(int packageID,
                    int weight,
                    int volume,
-                   Status status,
+                   PackageStatus status,
                    List<String> tags,
                    int senderAddressID,
                    int receiverAddressID,
@@ -66,11 +67,11 @@ public class Package {
         this.volume = volume;
     }
 
-    public Status getStatus() {
+    public PackageStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(PackageStatus status) {
         this.status = status;
     }
 
