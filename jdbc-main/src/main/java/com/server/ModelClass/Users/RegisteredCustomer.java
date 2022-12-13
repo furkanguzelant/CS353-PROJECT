@@ -17,8 +17,8 @@ public class RegisteredCustomer extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public RegisteredCustomer(String name, LocalDate birthDate, String email, String password, String phoneNumber) {
-        super(name, birthDate);
+    public RegisteredCustomer(String name, LocalDate birthDate, String type, String email, String password, String phoneNumber) {
+        super(name, birthDate, type);
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;

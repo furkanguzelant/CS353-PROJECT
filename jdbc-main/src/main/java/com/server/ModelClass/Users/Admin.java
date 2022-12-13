@@ -13,8 +13,9 @@ public class Admin extends Staff {
         super(email, password, phoneNumber, salary);
     }
 
-    public Admin(Integer userID, String name, LocalDate birthDate, String email, String password, String phoneNumber, int salary) {
-        super(userID, name, birthDate, email, password, phoneNumber, salary);
+    public Admin(Integer userID, String name, LocalDate birthDate, String type,
+                 String email, String password, String phoneNumber, int salary) {
+        super(userID, name, birthDate, type, email, password, phoneNumber, salary);
     }
 
 

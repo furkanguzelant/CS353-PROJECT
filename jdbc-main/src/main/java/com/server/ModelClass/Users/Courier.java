@@ -20,8 +20,8 @@ public class Courier extends Staff {
         this.status = status;
     }
 
-    public Courier(Integer userID, String name, LocalDate birthDate, String email, String password, String phoneNumber, int salary, Status status) {
-        super(userID, name, birthDate, email, password, phoneNumber, salary);
+    public Courier(Integer userID, String name, LocalDate birthDate,String type, String email, String password, String phoneNumber, int salary, Status status) {
+        super(userID, name, birthDate, type, email, password, phoneNumber, salary);
         this.status = status;
     }
 
