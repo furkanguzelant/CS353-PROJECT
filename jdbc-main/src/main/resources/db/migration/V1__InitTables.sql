@@ -106,7 +106,7 @@ create table employee(
 
 create table vehicle(
                         licensePlate 		varchar(10),
-                        status 				varchar(10),
+                        status 				int,
                         maxWeight 			int,
                         currentWeight		int,
                         PRIMARY KEY (licensePlate)
