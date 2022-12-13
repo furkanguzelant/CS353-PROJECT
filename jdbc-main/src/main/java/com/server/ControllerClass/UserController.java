@@ -1,5 +1,7 @@
 package com.server.ControllerClass;
 
+import com.server.ModelClass.Users.Courier;
+import com.server.ModelClass.Users.Employee;
 import com.server.ModelClass.Users.RegisteredCustomer;
 import com.server.ModelClass.Users.User;
 import com.server.ServiceClass.UserService;
@@ -30,6 +32,16 @@ public class UserController {
     @GetMapping(path="getUser/customer")
     public List<User> getCustomers() {
         return userService.getCustomers();
+    }
+
+    @PostMapping(path="createUser/employee")
+    public void addEmployee(@RequestBody Employee employee) {
+        userService.createEmployee(employee);
+    }
+
+    @PostMapping(path="createUser/courier")
+    public void addCourier(@RequestBody Courier courier) {
+        userService.createCourier(courier);
     }
 
 }
