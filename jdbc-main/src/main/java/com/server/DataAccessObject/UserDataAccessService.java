@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,7 +59,7 @@ public class UserDataAccessService implements UserDao {
 
 
     // Returns id of inserted user
-    public int insertUser(User user) {
+    public int insertUser(User user){
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         String sql = """
@@ -102,7 +103,7 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public int insertRegisteredCustomer(RegisteredCustomer registeredCustomer) {
+    public int insertRegisteredCustomer(RegisteredCustomer registeredCustomer)  {
         Integer id = insertCustomer(registeredCustomer);
         System.out.println(id);
 
