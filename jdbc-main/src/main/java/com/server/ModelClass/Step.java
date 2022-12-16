@@ -1,10 +1,9 @@
 package com.server.ModelClass;
 
 import java.util.Date;
+import com.server.Enums.ProcessType
 
 public class Step {
-
-    enum ProcessType { Receive, Transfer, Deliver }
 
     private int stepID;
     private Date receive_date;
