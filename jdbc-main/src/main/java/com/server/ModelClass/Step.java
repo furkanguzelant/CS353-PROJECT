@@ -1,7 +1,7 @@
 package com.server.ModelClass;
 
 import java.util.Date;
-import com.server.Enums.ProcessType
+import com.server.Enums.ProcessType;
 
 public class Step {
 

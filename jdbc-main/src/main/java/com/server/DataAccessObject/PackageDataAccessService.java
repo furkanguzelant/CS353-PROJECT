@@ -2,6 +2,7 @@ package com.server.DataAccessObject;
 
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
+import com.server.RowMappers.PackageRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.server.Enums.PackageStatus;
@@ -19,7 +20,7 @@ public class PackageDataAccessService implements PackageDao{
 
 
     @Override
-    public void insertPackage(Package package) {
+    public void insertPackage(Package pack) {
         String sql = """
                 INSERT INTO package(packageID, weight, volume, status, tags, senderAddressID, receiverAddressID, licencePlate, customerID, paymentID)
                 VALUES (?,?,?,?,?,?,?,?,?,?);
@@ -27,20 +28,18 @@ public class PackageDataAccessService implements PackageDao{
 
         jdbcTemplate.update(
                 sql,
-                package.getPackageID(),
-                package.getWeight(),
-                package.getVolume(),
-                package.toInteger(vehicle.getStatus()),
-                PackageStatus.toInteger(package.getStatus()),
-                package.getTags(),
-                package.getSenderAddressID(),
-                package.getReceiverAddressID(),
-                package.getLicencePlate(),
-                package.getCustomerID(),
-                package.getPaymentID()
+                pack.getPackageID(),
+                pack.getWeight(),
+                pack.getVolume(),
+                pack.getStatus(),
+                pack.getTags(),
+                pack.getSenderAddressID(),
+                pack.getReceiverAddressID(),
+                pack.getLicencePlate(),
+                pack.getCustomerID(),
+                pack.getPaymentID()
         );
     }
-
 
     @Override
     public  List<Package> selectAllPackages() {
@@ -79,7 +78,7 @@ public class PackageDataAccessService implements PackageDao{
             return new Step(
                     resultSet.getInt("stepID"),
                     resultSet.getDate("receive_date"),
-                    resultSet.getInt("volume"),
+//                    resultSet.getInt("volume"),
                     ProcessType.fromInteger(
                             resultSet.getInt("processType")
                     ),
