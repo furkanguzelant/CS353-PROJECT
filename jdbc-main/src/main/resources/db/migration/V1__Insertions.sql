@@ -29,3 +29,6 @@ values(1, 5);
 
 SELECT *
 FROM logisticunit natural join address
+
+
+
