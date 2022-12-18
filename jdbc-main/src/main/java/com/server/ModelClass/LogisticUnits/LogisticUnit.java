@@ -3,11 +3,13 @@ package com.server.ModelClass.LogisticUnits;
 public class LogisticUnit {
     private Integer logisticUnitID;
     private String  name;
+    private Integer addressID;
 
     //Constructors
-    public LogisticUnit(Integer logisticUnitID, String name) {
+    public LogisticUnit(Integer logisticUnitID, String name, Integer addressID) {
         this.logisticUnitID = logisticUnitID;
         this.name = name;
+        this.addressID = addressID;
     }
 
     public LogisticUnit(String name) {
