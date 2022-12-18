@@ -6,8 +6,8 @@ public class Branch extends LogisticUnit {
     private Integer distributionCenterID;
 
     //Constructors
-    public Branch(Integer logisticUnitID, String name, Integer distributionCenterID) {
-        super(logisticUnitID, name);
+    public Branch(Integer logisticUnitID, String name, Integer adressID, Integer distributionCenterID) {
+        super(logisticUnitID, name, adressID);
         this.distributionCenterID = distributionCenterID;
     }
 
