@@ -1,5 +1,7 @@
 package com.server.ControllerClass;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.server.Authorization.AuthorizationService;
 import com.server.ModelClass.Users.*;
 import com.server.ServiceClass.UserService;
 import org.springframework.http.HttpStatus;
@@ -36,20 +38,22 @@ public class UserController {
     }
 
     @PostMapping(path="createUser/staff")
-    public ResponseEntity<Map<String, Object>> addStaff (@RequestBody Staff staff) {
+    public ResponseEntity<Map<String, Object>> addStaff (@RequestHeader("access-token") String accessToken, @RequestBody Staff staff) {
         try {
-            if(staff.getType().equals("E")) {
-                userService.createEmployee((Employee) staff);
+            if (AuthorizationService.getInstance().verifyTokenAsAdmin( accessToken )){
+                if(staff.getType().equals("E")) {
+                    userService.createEmployee((Employee) staff);
+                }
+                else {
+                    userService.createCourier((Courier) staff);
+                }
+                return new ResponseEntity<>(Map.of("statusMessage", "Staff is successfully created"), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(Map.of("statusMessage", "Unauthorized"), HttpStatus.UNAUTHORIZED);
             }
-            else {
-                userService.createCourier((Courier) staff);
-            }
-            return new ResponseEntity<>(Map.of("statusMessage", "Staff created"), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(Map.of("statusMessage", "Staff could not be created"), HttpStatus.EXPECTATION_FAILED);
+        } catch (JWTDecodeException exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Invalid token"), HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }
