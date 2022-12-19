@@ -17,7 +17,7 @@ public class Package {
     private List<String> tags;
     private int senderAddressID;
     private int receiverAddressID;
-    private int licencePlate;
+    private String licencePlate;
     private int customerID;
     private int paymentID;
 
@@ -28,7 +28,7 @@ public class Package {
                    List<String> tags,
                    int senderAddressID,
                    int receiverAddressID,
-                   int licencePlate,
+                   String licencePlate,
                    int customerID,
                    int paymentID) {
         this.packageID = packageID;
@@ -99,11 +99,11 @@ public class Package {
         this.receiverAddressID = receiverAddressID;
     }
 
-    public int getLicencePlate() {
+    public String getLicencePlate() {
         return licencePlate;
     }
 
-    public void setLicencePlate(int licencePlate) {
+    public void setLicencePlate(String licencePlate) {
         this.licencePlate = licencePlate;
     }
 

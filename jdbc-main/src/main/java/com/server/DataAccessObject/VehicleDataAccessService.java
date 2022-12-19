@@ -83,9 +83,9 @@ public class VehicleDataAccessService implements VehicleDao {
                     ,
                     resultSet.getInt("senderAddressID"),
                     resultSet.getInt("receiverAddressID"),
-                    resultSet.getInt("licencePlate"),
-                    resultSet.getInt("customerID"),
-                    resultSet.getInt("paymentID")
+                    resultSet.getString("licensePlate"),
+                    resultSet.getInt("senderID"),
+                    resultSet.getInt("receiverID")
             );
         }, licensePlate);
 
@@ -136,7 +136,7 @@ public class VehicleDataAccessService implements VehicleDao {
         );
     }
 
-    List<String> getTagsOfPackage(int packageID) {
+    public List<String> getTagsOfPackage(int packageID) {
         var sql = """
                 SELECT distinct tag
                 FROM  package natural join package_tag

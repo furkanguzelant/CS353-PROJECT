@@ -121,7 +121,6 @@ create table package(
     packageID      	        SERIAL,
     weight 			        int,
     volume 			        int,
-    type 				    varchar(255),
     status 				    varchar(255),
     senderAddressID		    int,
     receiverAddressID		int,

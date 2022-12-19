@@ -1,12 +1,10 @@
 package com.server.DataAccessObject;
 
+import com.server.Enums.PackageStatus;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
-import com.server.RowMappers.PackageRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.server.Enums.PackageStatus;
-import com.server.Enums.ProcessType;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +46,23 @@ public class PackageDataAccessService implements PackageDao{
                 FROM package
                  """;
 
-        return jdbcTemplate.query(sql, new PackageRowMapper());
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new Package(
+                    resultSet.getInt("packageID"),
+                    resultSet.getInt("weight"),
+                    resultSet.getInt("volume"),
+                    PackageStatus.fromInteger(
+                            resultSet.getInt("status")
+                    ),
+                    getTagsOfPackage(resultSet.getInt("packageID"))
+                    ,
+                    resultSet.getInt("senderAddressID"),
+                    resultSet.getInt("receiverAddressID"),
+                    resultSet.getString("licensePlate"),
+                    resultSet.getInt("senderID"),
+                    resultSet.getInt("receiverID")
+            );
+        });
     }
 
     @Override
@@ -60,7 +74,23 @@ public class PackageDataAccessService implements PackageDao{
                  """;
 
 
-        return jdbcTemplate.query(sql, new PackageRowMapper(), packageID)
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+                    return new Package(
+                            resultSet.getInt("packageID"),
+                            resultSet.getInt("weight"),
+                            resultSet.getInt("volume"),
+                            PackageStatus.fromInteger(
+                                    resultSet.getInt("status")
+                            ),
+                            getTagsOfPackage(resultSet.getInt("packageID"))
+                            ,
+                            resultSet.getInt("senderAddressID"),
+                            resultSet.getInt("receiverAddressID"),
+                            resultSet.getString("licensePlate"),
+                            resultSet.getInt("senderID"),
+                            resultSet.getInt("receiverID")
+                    );
+                }, packageID)
                 .stream()
                 .findFirst();
     }
@@ -93,5 +123,19 @@ public class PackageDataAccessService implements PackageDao{
     @Override
     public List<Package> getPackagesByCustomerId(int userID) {
         return null;
+    }
+
+    public List<String> getTagsOfPackage(int packageID) {
+        var sql = """
+                SELECT distinct tag
+                FROM  package natural join package_tag
+                WHERE packageID = ?
+                 """;
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+                    return resultSet.getString("tag");
+                },
+                packageID
+        );
+
     }
 }
