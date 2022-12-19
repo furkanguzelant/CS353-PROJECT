@@ -29,7 +29,7 @@ public class AuthenticationService {
             Algorithm algorithm = Algorithm.HMAC256(key);
             returnMap.put("userID", user.getUserID());
 
-            if (user instanceof Admin) {
+            if (user.getType().equals(UserRoleConstraints.ADMIN_TYPE) ) {
                 String token = JWT.create()
                         .withIssuer("fancy_ghost_logistics")
                         .withClaim("roleID", UserRoleConstraints.ADMIN_TYPE)
@@ -37,7 +37,7 @@ public class AuthenticationService {
                         .sign(algorithm);
                 returnMap.put("token", token);
                 returnMap.put("type", "admin");
-            } else if (user instanceof Courier) {
+            } else if (user.getType().equals(UserRoleConstraints.COURIER_TYPE)) {
                 String token = JWT.create()
                         .withIssuer("fancy_ghost_logistics")
                         .withClaim("roleID", UserRoleConstraints.COURIER_TYPE)
@@ -45,7 +45,7 @@ public class AuthenticationService {
                         .sign(algorithm);
                 returnMap.put("token", token);
                 returnMap.put("type", "courier");
-            } else if (user instanceof Employee) {
+            } else if (user.getType().equals(UserRoleConstraints.EMPLOYEE_TYPE)) {
                 String token = JWT.create()
                         .withIssuer("fancy_ghost_logistics")
                         .withClaim("roleID", UserRoleConstraints.EMPLOYEE_TYPE)
@@ -53,7 +53,7 @@ public class AuthenticationService {
                         .sign(algorithm);
                 returnMap.put("token", token);
                 returnMap.put("type", "employee");
-            } else if (user instanceof RegisteredCustomer) {
+            } else if (user.getType().equals(UserRoleConstraints.REGISTERED_CUSTOMER_TYPE)) {
                 String token = JWT.create()
                         .withIssuer("fancy_ghost_logistics")
                         .withClaim("roleID", UserRoleConstraints.REGISTERED_CUSTOMER_TYPE)

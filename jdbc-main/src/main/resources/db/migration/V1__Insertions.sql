@@ -28,7 +28,15 @@ INSERT INTO branch
 values(1, 5);
 
 SELECT *
-FROM logisticunit natural join address
+FROM logisticunit natural join address;
+
+INSERT INTO users(name, birthdate, type)
+values('Can','2001-05-14', 'E');
+INSERT INTO staff
+values( currval('users_userid_seq'), 'employee2@hotmail.com','123','01416521652', 44444);
+INSERT INTO employee
+values( currval('users_userid_seq'),1);
+
 
 
 

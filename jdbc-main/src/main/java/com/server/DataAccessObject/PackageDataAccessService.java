@@ -21,24 +21,24 @@ public class PackageDataAccessService implements PackageDao{
 
     @Override
     public void insertPackage(Package pack) {
-        String sql = """
-                INSERT INTO package(packageID, weight, volume, status, tags, senderAddressID, receiverAddressID, licencePlate, customerID, paymentID)
-                VALUES (?,?,?,?,?,?,?,?,?,?);
-                 """;
-
-        jdbcTemplate.update(
-                sql,
-                pack.getPackageID(),
-                pack.getWeight(),
-                pack.getVolume(),
-                pack.getStatus(),
-                pack.getTags(),
-                pack.getSenderAddressID(),
-                pack.getReceiverAddressID(),
-                pack.getLicencePlate(),
-                pack.getCustomerID(),
-                pack.getPaymentID()
-        );
+//        String sql = """
+//                INSERT INTO package(packageID, weight, volume, status, tags, senderAddressID, receiverAddressID, licencePlate, customerID, paymentID)
+//                VALUES (?,?,?,?,?,?,?,?,?,?);
+//                 """;
+//
+//        jdbcTemplate.update(
+//                sql,
+//                pack.getPackageID(),
+//                pack.getWeight(),
+//                pack.getVolume(),
+//                pack.getStatus(),
+//                pack.getTags(),
+//                pack.getSenderAddressID(),
+//                pack.getReceiverAddressID(),
+//                pack.getLicencePlate(),
+//                pack.getCustomerID(),
+//                pack.getPaymentID()
+//        );
     }
 
     @Override
@@ -68,24 +68,30 @@ public class PackageDataAccessService implements PackageDao{
 
     @Override
     public  List<Step> getStepsOfPackage() {
-        var sql = """
-                SELECT *
-                FROM  step
-                WHERE packageID = ?
-                 """;
-
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            return new Step(
-                    resultSet.getInt("stepID"),
-                    resultSet.getDate("receive_date"),
+//        var sql = """
+//                SELECT *
+//                FROM  step
+//                WHERE packageID = ?
+//                 """;
+//
+//        return jdbcTemplate.query(sql, (resultSet, i) -> {
+//            return new Step(
+//                    resultSet.getInt("stepID"),
+//                    resultSet.getDate("receive_date"),
 //                    resultSet.getInt("volume"),
-                    ProcessType.fromInteger(
-                            resultSet.getInt("processType")
-                    ),
-                    resultSet.getInt("packageID"),
-                    resultSet.getInt("prevAddress"),
-                    resultSet.getInt("nextAddress")
-            );
-        });
+//                    ProcessType.fromInteger(
+//                            resultSet.getInt("processType")
+//                    ),
+//                    resultSet.getInt("packageID"),
+//                    resultSet.getInt("prevAddress"),
+//                    resultSet.getInt("nextAddress")
+//            );
+//        });
+        return null;
+    }
+
+    @Override
+    public List<Package> getPackagesByCustomerId(int userID) {
+        return null;
     }
 }
