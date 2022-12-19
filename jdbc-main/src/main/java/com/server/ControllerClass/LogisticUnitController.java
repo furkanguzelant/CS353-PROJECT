@@ -26,7 +26,11 @@ public class LogisticUnitController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getLogisticUnits() {
-        List<LogisticUnit> logisticUnitList = logisticUnitService.getLogisticUnits();
-        return new ResponseEntity<>(Map.of("statusMessage", "Successfully fetched.","logisticUnitList", logisticUnitList), HttpStatus.OK);
+        try {
+            List<LogisticUnit> logisticUnitList = logisticUnitService.getLogisticUnits();
+            return new ResponseEntity<>(Map.of("statusMessage", "Successfully fetched.", "logisticUnitList", logisticUnitList), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetch operation failed"), HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }

@@ -1,9 +1,16 @@
 package com.server.ModelClass.Users;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.server.ModelClass.Users.User;
 
 import java.time.LocalDate;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Employee.class, name = "E"),
+        @JsonSubTypes.Type(value = Courier.class, name = "C")
+})
 public class Staff extends User {
 
     private String email;
