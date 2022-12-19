@@ -1,13 +1,13 @@
 package com.server.ControllerClass;
 
-import com.server.ModelClass.Users.Courier;
-import com.server.ModelClass.Users.Employee;
-import com.server.ModelClass.Users.RegisteredCustomer;
-import com.server.ModelClass.Users.User;
+import com.server.ModelClass.Users.*;
 import com.server.ServiceClass.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -35,14 +35,21 @@ public class UserController {
         return userService.getCustomers();
     }
 
-    @PostMapping(path="createUser/employee")
-    public void addEmployee(@RequestBody Employee employee) {
-        userService.createEmployee(employee);
+    @PostMapping(path="createUser/staff")
+    public ResponseEntity<Map<String, Object>> addStaff (@RequestBody Staff staff) {
+        try {
+            if(staff.getType().equals("E")) {
+                userService.createEmployee((Employee) staff);
+            }
+            else {
+                userService.createCourier((Courier) staff);
+            }
+            return new ResponseEntity<>(Map.of("statusMessage", "Staff created"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Staff could not be created"), HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
-    @PostMapping(path="createUser/courier")
-    public void addCourier(@RequestBody Courier courier) {
-        userService.createCourier(courier);
-    }
 
 }
