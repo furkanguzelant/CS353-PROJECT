@@ -78,7 +78,7 @@ public class PackageDataAccessService implements PackageDao{
             return new Step(
                     resultSet.getInt("stepID"),
                     resultSet.getDate("receive_date"),
-//                    resultSet.getInt("volume"),
+                    resultSet.getInt("volume"),
                     ProcessType.fromInteger(
                             resultSet.getInt("processType")
                     ),
