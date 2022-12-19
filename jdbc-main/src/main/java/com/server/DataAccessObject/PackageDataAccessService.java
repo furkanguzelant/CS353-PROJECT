@@ -67,7 +67,7 @@ public class PackageDataAccessService implements PackageDao{
 
 
     @Override
-    public  List<Step> getStepsOfPackage() {
+    public List<Step> getStepsOfPackage() {
         var sql = """
                 SELECT *
                 FROM  step
@@ -85,6 +85,32 @@ public class PackageDataAccessService implements PackageDao{
                     resultSet.getInt("packageID"),
                     resultSet.getInt("prevAddress"),
                     resultSet.getInt("nextAddress")
+            );
+        });
+    }
+
+    @Override
+    public List<Package> getPackagesByCustomerId(int userID){
+        var sql = """
+            SELECT *
+            FROM  package
+            WHERE customerID = ?
+             """;
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new Package(
+                    resultSet.getInt("packageID"),
+                    resultSet.getInt("weight"),
+                    resultSet.getInt("volume"),
+                    PackageStatus.fromInteger(
+                            resultSet.getInt("status")
+                    ),
+                    resultSet.getSet("tags"),
+                    resultSet.getInt("senderAddressID"),
+                    resultSet.getInt("receiverAddressID"),
+                    resultSet.getInt("licencePlate"),
+                    resultSet.getInt("customerID"),
+                    resultSet.getInt("paymentID")
             );
         });
     }
