@@ -16,6 +16,6 @@ public interface PackageDao {
 
     List<Step> getStepsOfPackage();
 
-    List<Package> getPackagesByCustomerId(int userID);
+    List<Package> getPackagesByCustomerId(int customerID);
 
 }
