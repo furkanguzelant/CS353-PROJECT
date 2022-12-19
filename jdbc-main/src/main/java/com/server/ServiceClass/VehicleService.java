@@ -31,7 +31,20 @@ public class VehicleService {
         return vehicleDao.getVehicleByLicensePlate(licensePlate);
     }
 
-    public List<Package> getPackagesOfVehicle(){
-        return vehicleDao.getPackagesOfVehicle();
+    public List<Package> getPackagesOfVehicle(String licensePlate){
+        return vehicleDao.getPackagesOfVehicle(licensePlate);
     }
+
+    public Optional<Vehicle> getVehicleFromCourierID(int courierID){
+        return vehicleDao.getVehicleFromCourierID(courierID);
+    }
+
+    public void assignVehicleToCourier(String licensePlate, int courierID){
+         vehicleDao.assignVehicleToCourier(licensePlate,courierID);
+    }
+
+    public void addPackageToVehicle(int packageID, String licensePlate){
+        vehicleDao.addPackageToVehicle(packageID,licensePlate);
+    }
+
 }

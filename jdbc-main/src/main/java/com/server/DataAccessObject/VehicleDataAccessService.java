@@ -64,7 +64,7 @@ public class VehicleDataAccessService implements VehicleDao {
     }
 
     @Override
-    public List<Package> getPackagesOfVehicle() {
+    public List<Package> getPackagesOfVehicle(String licensePlate) {
         var sql = """
                 SELECT *
                 FROM  package
@@ -87,8 +87,53 @@ public class VehicleDataAccessService implements VehicleDao {
                     resultSet.getInt("customerID"),
                     resultSet.getInt("paymentID")
             );
-        });
+        }, licensePlate);
 
+    }
+
+    @Override
+    public void addPackageToVehicle(int packageID, String licensePlate) {
+        String sql = """
+                 UPDATE package
+                 SET licensePlate = ?
+                 WHERE packageID = ?
+                 """;
+
+        jdbcTemplate.update(
+                sql,
+                packageID,
+                licensePlate
+        );
+
+    }
+
+    @Override
+    public Optional<Vehicle> getVehicleFromCourierID(int courierID) {
+
+        var sql = """
+                SELECT *
+                FROM  vehicle
+                WHERE courierID = ?
+                 """;
+
+        return jdbcTemplate.query(sql, new VehicleRowMapper(), courierID)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public void assignVehicleToCourier(String licensePlate, int courierID) {
+        String sql = """
+                 UPDATE vehicle
+                 SET courierID = ?
+                 WHERE licensePlate = ?
+                 """;
+
+        jdbcTemplate.update(
+                sql,
+                courierID,
+                licensePlate
+        );
     }
 
     List<String> getTagsOfPackage(int packageID) {
@@ -104,4 +149,6 @@ public class VehicleDataAccessService implements VehicleDao {
         );
 
     }
+
+
 }

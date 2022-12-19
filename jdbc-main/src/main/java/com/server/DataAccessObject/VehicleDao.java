@@ -14,8 +14,13 @@ public interface VehicleDao {
 
     Optional<Vehicle> getVehicleByLicensePlate(String licensePlate);
 
-    List<Package> getPackagesOfVehicle();
+    List<Package> getPackagesOfVehicle(String licensePlate);
 
+    void addPackageToVehicle(int packageID, String licensePlate);
+
+    Optional<Vehicle> getVehicleFromCourierID(int courierID);
+
+    void assignVehicleToCourier(String licensePlate, int courierID);
 
 
 
