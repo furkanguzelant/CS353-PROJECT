@@ -1,0 +1,22 @@
+package com.server.ServiceClass;
+
+import com.server.DataAccessObject.StorageDao;
+import com.server.DataAccessObject.UserDao;
+import com.server.ModelClass.Storage;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class StorageService {
+    private final StorageDao storageDao;
+
+    public StorageService(StorageDao storageDao) {
+        this.storageDao = storageDao;
+    }
+
+    public List<Storage> getStoragesByCourierID(int courierID) {
+        return storageDao.getStoragesByCourierID(courierID);
+    }
+
+}

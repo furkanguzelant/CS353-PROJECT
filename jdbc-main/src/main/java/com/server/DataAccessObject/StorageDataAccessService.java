@@ -4,9 +4,11 @@ import com.server.Enums.PackageStatus;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Storage;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class StorageDataAccessService implements StorageDao {
 
     private final JdbcTemplate jdbcTemplate;
