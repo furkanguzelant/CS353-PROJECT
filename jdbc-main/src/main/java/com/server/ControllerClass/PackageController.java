@@ -27,7 +27,7 @@ public class PackageController {
     }
 
     @GetMapping(path = "getPackagesByCustomerId")
-    public Optional<Package> getPackagesByCustomerId(int customerID){
+    public List<Package> getPackagesByCustomerId(int customerID){
         return packageService.getPackagesByCustomerId(customerID);
     }
 
