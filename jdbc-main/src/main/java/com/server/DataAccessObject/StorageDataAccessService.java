@@ -1,8 +1,5 @@
 package com.server.DataAccessObject;
 
-import com.server.Enums.PackageStatus;
-import com.server.Enums.VehicleStatus;
-import com.server.ModelClass.Package;
 import com.server.ModelClass.Storage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -45,7 +42,7 @@ public class StorageDataAccessService implements StorageDao {
     public List<Storage> getStoragesEmployeeID(int employeeID) {
         var sql = """
                 SELECT *
-                FROM employee natural join logisticunit_storage natural join storage
+                FROM employee natural join storage
                 WHERE userid = ?
                  """;
 
@@ -56,7 +53,9 @@ public class StorageDataAccessService implements StorageDao {
                     resultSet.getInt("currentVolume"),
                     resultSet.getInt("logisticUnitID")
             );
-        }, employeeID);
+        }, employeeID)
+        ;
+
     }
 
     @Override

@@ -1,13 +1,18 @@
 package com.server.ControllerClass;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.server.Authorization.AuthorizationService;
 import com.server.ModelClass.Storage;
+import com.server.ModelClass.Users.Courier;
+import com.server.ModelClass.Users.Employee;
+import com.server.ModelClass.Users.Staff;
 import com.server.ServiceClass.StorageService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -25,7 +30,13 @@ public class StorageController {
     }
 
     @GetMapping(path="getStoragesByEmployeeID")
-    public List<Storage> getStoragesByEmployeeID(int employeeID) {
-        return storageService.getStoragesByEmployeeID(employeeID);
+    public ResponseEntity<Map<String, Object>> addStaff (@RequestParam int employeeID) {
+        try {
+            List<Storage> storages = storageService.getStoragesByEmployeeID(employeeID);
+                return new ResponseEntity<>(Map.of("statusMessage", "Storages of employees succesfully fetched" , "Storages", storages ), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "An exception occured"), HttpStatus.BAD_REQUEST);
+        }
     }
 }
