@@ -86,8 +86,9 @@ public class VehicleDataAccessService implements VehicleDao {
                     resultSet.getInt("receiverAddressID"),
                     resultSet.getString("licensePlate"),
                     resultSet.getInt("senderID"),
-                    resultSet.getInt("receiverID")
-            );
+                    resultSet.getInt("receiverID"),
+                    resultSet.getInt(("storageID")),
+                    resultSet.getInt("courierID"));
         }, licensePlate);
 
     }
@@ -159,8 +160,9 @@ public class VehicleDataAccessService implements VehicleDao {
                     resultSet.getInt("receiverAddressID"),
                     resultSet.getString("licensePlate"),
                     resultSet.getInt("senderID"),
-                    resultSet.getInt("receiverID")
-            );
+                    resultSet.getInt("receiverID"),
+                    resultSet.getInt(("storageID")),
+                    courierID);
         }, courierID);
     }
 

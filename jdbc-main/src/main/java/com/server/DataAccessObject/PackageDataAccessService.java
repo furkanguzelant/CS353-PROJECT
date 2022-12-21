@@ -54,7 +54,7 @@ public class PackageDataAccessService implements PackageDao {
     }
 
     @Override
-    public  List<Package> selectAllPackages() {
+    public List<Package> selectAllPackages() {
         var sql = """
                 SELECT *
                 FROM package
@@ -74,8 +74,9 @@ public class PackageDataAccessService implements PackageDao {
                     resultSet.getInt("receiverAddressID"),
                     resultSet.getString("licensePlate"),
                     resultSet.getInt("senderID"),
-                    resultSet.getInt("receiverID")
-            );
+                    resultSet.getInt("receiverID"),
+                    resultSet.getInt("storageID"),
+                    resultSet.getInt("courierID"));
         });
     }
 
@@ -102,8 +103,9 @@ public class PackageDataAccessService implements PackageDao {
                             resultSet.getInt("receiverAddressID"),
                             resultSet.getString("licensePlate"),
                             resultSet.getInt("senderID"),
-                            resultSet.getInt("receiverID")
-                    );
+                            resultSet.getInt("receiverID"),
+                            resultSet.getInt(("storageID")),
+                            resultSet.getInt("courierID"));
                 }, packageID)
                 .stream()
                 .findFirst();
@@ -111,7 +113,7 @@ public class PackageDataAccessService implements PackageDao {
 
 
     @Override
-    public  List<Step> getStepsOfPackage(int packageID) {
+    public List<Step> getStepsOfPackage(int packageID) {
         var sql = """
                 SELECT *
                 FROM  step
@@ -155,9 +157,10 @@ public class PackageDataAccessService implements PackageDao {
                     resultSet.getInt("receiverAddressID"),
                     resultSet.getString("licensePlate"),
                     resultSet.getInt("senderID"),
-                    resultSet.getInt("receiverID")
-            );
-        } , senderID);
+                    resultSet.getInt("receiverID"),
+                    resultSet.getInt(("storageID")),
+                    resultSet.getInt("courierID"));
+        }, senderID);
     }
 
     public List<String> getTagsOfPackage(int packageID) {
