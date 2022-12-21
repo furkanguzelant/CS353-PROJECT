@@ -45,7 +45,7 @@ public class StorageDataAccessService implements StorageDao {
     public List<Storage> getStoragesEmployeeID(int employeeID) {
         var sql = """
                 SELECT *
-                FROM employee natural join logisticunit_storage
+                FROM employee natural join logisticunit_storage natural join storage
                 WHERE userid = ?
                  """;
 

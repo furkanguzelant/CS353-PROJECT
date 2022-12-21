@@ -225,8 +225,6 @@ create table branch
         distributionCenter (logisticUnitID)
 );
 
-
-
 create table customer_address
 (
     customerID int,
