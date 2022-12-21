@@ -65,6 +65,7 @@ public class VehicleDataAccessService implements VehicleDao {
 
     @Override
     public List<Package> getPackagesOfVehicle(String licensePlate) {
+
         var sql = """
                 SELECT *
                 FROM  package
@@ -134,6 +135,33 @@ public class VehicleDataAccessService implements VehicleDao {
                 courierID,
                 licensePlate
         );
+    }
+
+    @Override
+    public List<Package> getPackagesOfCourierInsideVehicle(int courierID) {
+        var sql = """
+                SELECT *
+                FROM  vehicle natural join package
+                WHERE courierid = ?
+                 """;
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new Package(
+                    resultSet.getInt("packageID"),
+                    resultSet.getInt("weight"),
+                    resultSet.getInt("volume"),
+                    PackageStatus.fromInteger(
+                            resultSet.getInt("status")
+                    ),
+                    getTagsOfPackage(resultSet.getInt("packageID"))
+                    ,
+                    resultSet.getInt("senderAddressID"),
+                    resultSet.getInt("receiverAddressID"),
+                    resultSet.getString("licensePlate"),
+                    resultSet.getInt("senderID"),
+                    resultSet.getInt("receiverID")
+            );
+        }, courierID);
     }
 
     public List<String> getTagsOfPackage(int packageID) {

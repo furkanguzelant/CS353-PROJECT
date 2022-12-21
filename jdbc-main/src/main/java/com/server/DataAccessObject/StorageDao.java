@@ -9,4 +9,8 @@ public interface StorageDao {
     void insertStorage();
 
     List<Storage> getStoragesByCourierID(int courierID);
+
+    List<Storage> getStoragesEmployeeID(int employeeID);
+
+    void putPackageIntoStorage(int packageID, int storageID);
 }

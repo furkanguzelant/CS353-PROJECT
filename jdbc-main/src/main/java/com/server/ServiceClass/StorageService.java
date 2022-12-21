@@ -19,4 +19,8 @@ public class StorageService {
         return storageDao.getStoragesByCourierID(courierID);
     }
 
+    public List<Storage> getStoragesByEmployeeID(int employeeID) {
+        return storageDao.getStoragesEmployeeID(employeeID);
+    }
+
 }

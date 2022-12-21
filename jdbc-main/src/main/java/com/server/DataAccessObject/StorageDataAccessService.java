@@ -1,6 +1,7 @@
 package com.server.DataAccessObject;
 
 import com.server.Enums.PackageStatus;
+import com.server.Enums.VehicleStatus;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Storage;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,5 +39,36 @@ public class StorageDataAccessService implements StorageDao {
                     resultSet.getInt("logisticUnitID")
             );
         }, courierID);
+    }
+
+    @Override
+    public List<Storage> getStoragesEmployeeID(int employeeID) {
+        var sql = """
+                SELECT *
+                FROM employee natural join logisticunit_storage
+                WHERE userid = ?
+                 """;
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new Storage(
+                    resultSet.getInt("storageID"),
+                    resultSet.getInt("maxVolume"),
+                    resultSet.getInt("currentVolume"),
+                    resultSet.getInt("logisticUnitID")
+            );
+        }, employeeID);
+    }
+
+    @Override
+    public void putPackageIntoStorage(int packageID, int storageID) {
+        String sql = """
+                INSERT INTO package_storage(PACKAGEID, STORAGEID)
+                VALUES (?,?);
+                 """;
+        jdbcTemplate.update(
+                sql,
+                packageID,
+                storageID
+        );
     }
 }

@@ -22,6 +22,8 @@ public interface VehicleDao {
 
     void assignVehicleToCourier(String licensePlate, int courierID);
 
+    List<Package> getPackagesOfCourierInsideVehicle(int courierID);
+
 
 
 }

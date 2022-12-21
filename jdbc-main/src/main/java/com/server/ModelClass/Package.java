@@ -18,8 +18,8 @@ public class Package {
     private int senderAddressID;
     private int receiverAddressID;
     private String licencePlate;
-    private int customerID;
-    private int paymentID;
+    private int senderID;
+    private int receiverID;
 
     public Package(int packageID,
                    int weight,
@@ -29,8 +29,8 @@ public class Package {
                    int senderAddressID,
                    int receiverAddressID,
                    String licencePlate,
-                   int customerID,
-                   int paymentID) {
+                   int senderID,
+                   int receiverID) {
         this.packageID = packageID;
         this.weight = weight;
         this.volume = volume;
@@ -39,8 +39,8 @@ public class Package {
         this.senderAddressID = senderAddressID;
         this.receiverAddressID = receiverAddressID;
         this.licencePlate = licencePlate;
-        this.customerID = customerID;
-        this.paymentID = paymentID;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
     }
 
     public int getPackageID() {
@@ -107,19 +107,19 @@ public class Package {
         this.licencePlate = licencePlate;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public int getSenderID() {
+        return senderID;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setSenderID(int senderID) {
+        this.senderID = senderID;
     }
 
-    public int getPaymentID() {
-        return paymentID;
+    public int getReceiverID() {
+        return receiverID;
     }
 
-    public void setPaymentID(int paymentID) {
-        this.paymentID = paymentID;
+    public void setReceiverID(int receiverID) {
+        this.receiverID = receiverID;
     }
 }

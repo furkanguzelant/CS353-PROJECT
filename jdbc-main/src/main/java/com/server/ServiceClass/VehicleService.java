@@ -39,6 +39,9 @@ public class VehicleService {
         return vehicleDao.getVehicleFromCourierID(courierID);
     }
 
+    public List<Package> getPackagesOfCourierInsideVehicle(int courierID){
+        return vehicleDao.getPackagesOfCourierInsideVehicle(courierID);
+    }
     public void assignVehicleToCourier(String licensePlate, int courierID){
          vehicleDao.assignVehicleToCourier(licensePlate,courierID);
     }
@@ -46,5 +49,7 @@ public class VehicleService {
     public void addPackageToVehicle(int packageID, String licensePlate){
         vehicleDao.addPackageToVehicle(packageID,licensePlate);
     }
+
+
 
 }

@@ -47,9 +47,14 @@ public class VehicleController {
     Optional<Vehicle> getVehicleFromCourierID(int courierID){
         return vehicleService.getVehicleFromCourierID(courierID);
     }
+
     @GetMapping(path ="assignVehicleToCourier" )
     public void assignVehicleToCourier(String licensePlate, int courierID){
         vehicleService.assignVehicleToCourier(licensePlate,courierID);
+    }
+    @GetMapping(path = "getPackagesOfCourierInsideVehicle")
+    public List<Package> getPackagesOfCourierInsideVehicle(int courierID){
+        return vehicleService.getPackagesOfCourierInsideVehicle(courierID);
     }
 
 }

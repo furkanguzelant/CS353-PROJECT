@@ -23,4 +23,9 @@ public class StorageController {
     public List<Storage> getStoragesByCourierID(int courierID) {
         return storageService.getStoragesByCourierID(courierID);
     }
+
+    @GetMapping(path="getStoragesByEmployeeID")
+    public List<Storage> getStoragesByEmployeeID(int employeeID) {
+        return storageService.getStoragesByEmployeeID(employeeID);
+    }
 }
