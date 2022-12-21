@@ -30,9 +30,10 @@ public class StorageController {
     }
 
     @GetMapping(path="getStoragesByEmployeeID")
-    public ResponseEntity<Map<String, Object>> addStaff (@RequestParam int employeeID) {
+    public ResponseEntity<Map<String, Object>> getStoragesByEmployeeID (@RequestParam int employeeID) {
         try {
             List<Storage> storages = storageService.getStoragesByEmployeeID(employeeID);
+            System.out.println(storages);
                 return new ResponseEntity<>(Map.of("statusMessage", "Storages of employees succesfully fetched" , "Storages", storages ), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

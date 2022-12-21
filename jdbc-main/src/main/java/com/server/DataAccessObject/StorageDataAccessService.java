@@ -24,7 +24,7 @@ public class StorageDataAccessService implements StorageDao {
     public List<Storage> getStoragesByCourierID(int courierID) {
         var sql = """
                 SELECT *
-                FROM courier natural join logisticunit_storage
+                FROM courier natural join storage
                 WHERE userid = ?
                  """;
 
@@ -60,14 +60,14 @@ public class StorageDataAccessService implements StorageDao {
 
     @Override
     public void putPackageIntoStorage(int packageID, int storageID) {
-        String sql = """
-                INSERT INTO package_storage(PACKAGEID, STORAGEID)
-                VALUES (?,?);
-                 """;
-        jdbcTemplate.update(
-                sql,
-                packageID,
-                storageID
-        );
+//        String sql = """
+//                INSERT INTO package_storage(PACKAGEID, STORAGEID)
+//                VALUES (?,?);
+//                 """;
+//        jdbcTemplate.update(
+//                sql,
+//                packageID,
+//                storageID
+//        );
     }
 }
