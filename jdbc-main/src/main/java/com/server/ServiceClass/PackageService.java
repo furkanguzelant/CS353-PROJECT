@@ -17,8 +17,8 @@ public class PackageService {
         this.packageDao = packageDao;
     }
 
-    public void insertPackage(Package pack){
-        packageDao.insertPackage(pack);
+    public int insertPackage(Package pack){
+        return packageDao.insertPackage(pack);
     }
 
     public List<Package> selectAllPackages(){

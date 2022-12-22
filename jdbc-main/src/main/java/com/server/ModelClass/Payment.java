@@ -1,15 +1,16 @@
 package com.server.ModelClass;
 
-enum Type { PREPAID,COUNTER_PAID}
-enum Status { NOT_PAID,PAID}
+import com.server.Enums.PaymentStatus;
+import com.server.Enums.PaymentType;
+
 
 public class Payment {
     int price;
-    Type type;
-    Status status;
+    PaymentType type;
+    PaymentStatus status;
     int packageID;
 
-    public Payment(int price, Type type, Status status, int packageID) {
+    public Payment(int price, PaymentType type, PaymentStatus status, int packageID) {
         this.price = price;
         this.type = type;
         this.status = status;
@@ -24,19 +25,19 @@ public class Payment {
         this.price = price;
     }
 
-    public Type getType() {
+    public PaymentType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(PaymentType type) {
         this.type = type;
     }
 
-    public Status getStatus() {
+    public PaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 

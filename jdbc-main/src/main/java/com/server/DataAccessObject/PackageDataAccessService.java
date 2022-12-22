@@ -5,8 +5,12 @@ import com.server.Enums.ProcessType;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,24 +24,36 @@ public class PackageDataAccessService implements PackageDao {
 
 
     @Override
-    public void insertPackage(Package pack) {
+    public int insertPackage(Package pack) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         String sql = """
-                INSERT INTO package(packageID, weight, volume, status, senderAddressID, receiverAddressID, licensePlate, senderid, receiverid)
+                INSERT INTO package(weight, volume, status, senderAddressID, receiverAddressID, licensePlate, senderid, receiverid, storageid)
                 VALUES (?,?,?,?,?,?,?,?,?);
                  """;
 
-        jdbcTemplate.update(
-                sql,
-                pack.getPackageID(),
-                pack.getWeight(),
-                pack.getVolume(),
-                pack.getStatus(),
-                pack.getSenderAddressID(),
-                pack.getReceiverAddressID(),
-                pack.getLicencePlate(),
-                pack.getSenderID(),
-                pack.getReceiverID()
-        );
+        jdbcTemplate.update(conn -> {
+
+            // Pre-compiling SQL
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            // Set parameters
+            preparedStatement.setInt(1, pack.getWeight());
+            preparedStatement.setInt(2, pack.getVolume());
+            preparedStatement.setInt(3, pack.getStatus().ordinal());
+            preparedStatement.setInt(4, pack.getSenderAddressID());
+            preparedStatement.setInt(5, pack.getReceiverAddressID());
+            preparedStatement.setString(6, pack.getLicencePlate());
+            preparedStatement.setInt(7, pack.getSenderID());
+            preparedStatement.setInt(8, pack.getReceiverID());
+            preparedStatement.setInt(9, pack.getStorageID());
+
+            return preparedStatement;
+
+        }, keyHolder);
+
+        Integer id = (Integer) keyHolder.getKeys().get("packageid");
+        System.out.println(id);
 
         String sql2 = """
                 INSERT INTO package_tag(packageID, tag)
@@ -47,10 +63,11 @@ public class PackageDataAccessService implements PackageDao {
         for (int i = 0; i < pack.getTags().size(); i++) {
             jdbcTemplate.update(
                     sql2,
-                    pack.getPackageID(),
+                    id,
                     pack.getTags().get(i)
             );
         }
+        return id;
     }
 
     @Override
@@ -176,4 +193,5 @@ public class PackageDataAccessService implements PackageDao {
         );
 
     }
+
 }

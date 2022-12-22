@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PackageDao {
 
-    void insertPackage(Package pack);
+    int insertPackage(Package pack);
 
     List<Package> selectAllPackages();
 

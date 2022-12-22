@@ -18,8 +18,8 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public void addCustomer(User user) {
-        int result = userDao.insertCustomer(user);
+    public int addCustomer(User user) {
+        return userDao.insertCustomer(user);
     }
 
     public int addRegisteredCustomer(RegisteredCustomer registeredCustomer) {

@@ -358,6 +358,12 @@ values ('Fragile');
 INSERT INTO tag(tag)
 values ('Flammable');
 
+INSERT INTO tag(tag)
+values ('Urgent');
+
+INSERT INTO tag(tag)
+values ('Food');
+
 INSERT INTO package_tag(packageID, tag)
 values (currval('package_packageid_seq'),'Fragile');
 
