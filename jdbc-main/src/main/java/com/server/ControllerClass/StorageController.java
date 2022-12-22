@@ -40,4 +40,15 @@ public class StorageController {
             return new ResponseEntity<>(Map.of("statusMessage", "An exception occured"), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(path="insertPackageToStorage")
+    public ResponseEntity<Map<String, Object>> getStoragesByEmployeeID (@RequestParam int packageID, @RequestParam int storageID) {
+        try {
+            storageService.insertPackageToStorage(packageID,storageID);
+            return new ResponseEntity<>(Map.of("statusMessage", "Package has been inserted to the storage successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "An exception occured"), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

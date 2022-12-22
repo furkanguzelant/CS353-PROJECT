@@ -59,15 +59,17 @@ public class StorageDataAccessService implements StorageDao {
     }
 
     @Override
-    public void putPackageIntoStorage(int packageID, int storageID) {
-//        String sql = """
-//                INSERT INTO package_storage(PACKAGEID, STORAGEID)
-//                VALUES (?,?);
-//                 """;
-//        jdbcTemplate.update(
-//                sql,
-//                packageID,
-//                storageID
-//        );
+    public void insertPackageToStorage(int packageID, int storageID) {
+        var sql = """
+                 UPDATE package
+                 SET storageid = ?, status = 2, courierid = null
+                 WHERE packageID = ?;
+                 """;
+
+        jdbcTemplate.update(
+                sql,
+                storageID,
+                packageID
+        );
     }
 }

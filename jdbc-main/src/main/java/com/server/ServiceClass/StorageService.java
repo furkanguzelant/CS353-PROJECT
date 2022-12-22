@@ -23,4 +23,7 @@ public class StorageService {
         return storageDao.getStoragesEmployeeID(employeeID);
     }
 
+    public void insertPackageToStorage(int packageID, int storageID) {
+        storageDao.insertPackageToStorage( packageID, storageID);
+    }
 }

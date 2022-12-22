@@ -12,5 +12,5 @@ public interface StorageDao {
 
     List<Storage> getStoragesEmployeeID(int employeeID);
 
-    void putPackageIntoStorage(int packageID, int storageID);
+    void insertPackageToStorage(int packageID, int storageID);
 }

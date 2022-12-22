@@ -12,6 +12,5 @@ public enum PackageStatus {
             case 3 -> InTransfer;
             default -> null;
         };
-
     }
 }
