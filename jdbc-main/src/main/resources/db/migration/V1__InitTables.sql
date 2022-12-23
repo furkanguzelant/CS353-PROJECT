@@ -391,5 +391,3 @@ WHERE packageid = currval('package_packageid_seq');
 INSERT INTO complaint(userID, packageID, type, message)
 values (4, currval('package_packageid_seq'), 2, 'Paketim nerde, noluyor yahu !?');
 
-
-

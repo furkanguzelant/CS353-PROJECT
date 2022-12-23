@@ -7,4 +7,5 @@ import java.util.List;
 public interface LogisticUnitDao {
 
     List<LogisticUnit> getLogisticUnits();
+    LogisticUnit getLogisticUnitByEmployeeID(int employeeID);
 }

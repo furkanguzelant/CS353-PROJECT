@@ -33,4 +33,5 @@ public class LogisticUnitController {
             return new ResponseEntity<>(Map.of("statusMessage", "Fetch operation failed"), HttpStatus.EXPECTATION_FAILED);
         }
     }
+
 }

@@ -36,4 +36,20 @@ public class LogisticUnitDataAccessService implements LogisticUnitDao {
             );
         });
     }
+
+    public LogisticUnit getLogisticUnitByEmployeeID(int employeeID) {
+        var sql = """
+                SELECT logisticUnitID, name, addressID
+                FROM  logisticUnit natural join employee
+                WHERE employee.userID = ?""";
+
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            return new LogisticUnit(
+                    resultSet.getInt("logisticUnitID"),
+                    resultSet.getString("name"),
+                    resultSet.getInt("addressID")
+            );
+        }, employeeID);
+    }
+
 }

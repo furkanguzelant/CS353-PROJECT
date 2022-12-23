@@ -21,4 +21,8 @@ public class LogisticUnitService {
         return logisticUnitDao.getLogisticUnits();
     }
 
+    public LogisticUnit getLogisticUnitByEmployeeID(int employeeID) {
+        return logisticUnitDao.getLogisticUnitByEmployeeID(employeeID);
+    }
+
 }
