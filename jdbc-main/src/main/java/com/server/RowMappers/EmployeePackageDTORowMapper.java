@@ -25,7 +25,7 @@ public class EmployeePackageDTORowMapper implements RowMapper<EmployeePackageDTO
                         resultSet.getInt("weight"),
                         resultSet.getInt("volume"),
                         PackageStatus.fromInteger(
-                                resultSet.getInt("status")
+                                resultSet.getInt("package_status")
                         ),
                         null,
                         resultSet.getInt("senderAddressID"),
@@ -38,7 +38,7 @@ public class EmployeePackageDTORowMapper implements RowMapper<EmployeePackageDTO
                 new Payment(
                         resultSet.getInt("price"),
                         PaymentType.fromInteger(resultSet.getInt("type")),
-                        PaymentStatus.fromInteger(resultSet.getInt("status")),
+                        PaymentStatus.fromInteger(resultSet.getInt("payment_status")),
                         resultSet.getInt("packageid")
                 ),
                 new Address(

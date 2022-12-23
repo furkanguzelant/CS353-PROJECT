@@ -2,8 +2,12 @@ package com.server.DataAccessObject;
 
 import com.server.DTO.EmployeePackageDTO;
 import com.server.Enums.PackageStatus;
+import com.server.Enums.PaymentStatus;
+import com.server.Enums.PaymentType;
 import com.server.Enums.ProcessType;
+import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
+import com.server.ModelClass.Payment;
 import com.server.ModelClass.Step;
 import com.server.RowMappers.EmployeePackageDTORowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -199,7 +203,10 @@ public class PackageDataAccessService implements PackageDao {
     @Override
     public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
         var sql = """
-                SELECT *
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                  storageID, price, type, payment.status as payment_status, addressid, country, city,
+                 district, zipcode, addressinfo
                 FROM employee natural join storage natural join package, payment, address
                 WHERE employee.userID = ?
                 AND package.packageID = payment.packageID 
