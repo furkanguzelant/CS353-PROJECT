@@ -1,9 +1,11 @@
 package com.server.DataAccessObject;
 
+import com.server.DTO.EmployeePackageDTO;
 import com.server.Enums.PackageStatus;
 import com.server.Enums.ProcessType;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
+import com.server.RowMappers.EmployeePackageDTORowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -192,6 +194,26 @@ public class PackageDataAccessService implements PackageDao {
                 packageID
         );
 
+    }
+
+    @Override
+    public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+        var sql = """
+                SELECT *
+                FROM employee natural join storage natural join package, payment, address
+                WHERE employee.userID = ?
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID;
+                 """;
+
+        List<EmployeePackageDTO> employeePackageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), employeeID);
+
+        for(int i = 0; i < employeePackageDTOList.size(); i++) {
+            int packageID = employeePackageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            employeePackageDTOList.get(i).getPack().setTags(tags);
+        }
+        return employeePackageDTOList;
     }
 
 }

@@ -2,14 +2,14 @@ package com.server.ModelClass;
 
 public class Address {
 
-    private String addressID;
+    private Integer addressID;
     private String country;
     private String city;
     private String district;
     private String zipcode;
     private String addressInfo;
 
-    public Address(String addressID,
+    public Address(Integer addressID,
                    String country,
                    String city,
                    String district,
@@ -23,11 +23,11 @@ public class Address {
         this.addressInfo = addressInfo;
     }
 
-    public String getAddressID() {
+    public Integer getAddressID() {
         return addressID;
     }
 
-    public void setAddressID(String addressID) {
+    public void setAddressID(Integer addressID) {
         this.addressID = addressID;
     }
 

@@ -5,6 +5,8 @@ import com.server.DataAccessObject.PaymentDao;
 import com.server.ModelClass.Payment;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PaymentService {
 
@@ -16,5 +18,9 @@ public class PaymentService {
 
     public void addPayment(Payment payment) {
         paymentDao.insertPayment(payment);
+    }
+
+    public Payment getPaymentByPackageID(int packageID) {
+        return paymentDao.getPaymentByPackageID(packageID);
     }
 }

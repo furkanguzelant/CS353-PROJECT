@@ -1,11 +1,10 @@
 package com.server.ControllerClass;
 
+import com.server.DTO.EmployeePackageDTO;
 import com.server.Enums.ProcessType;
-import com.server.ModelClass.Address;
+import com.server.ModelClass.*;
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
 import com.server.ModelClass.Package;
-import com.server.ModelClass.Payment;
-import com.server.ModelClass.Step;
 import com.server.ModelClass.Users.User;
 import com.server.ServiceClass.*;
 import org.springframework.http.HttpStatus;
@@ -14,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -29,15 +25,17 @@ public class PackageController {
     private final PaymentService paymentService;
     private final StepService stepService;
     private final LogisticUnitService logisticUnitService;
+    private final StorageService storageService;
 
     public PackageController(PackageService packageService, AddressService addressService,
                              PaymentService paymentService, StepService stepService,
-                             LogisticUnitService logisticUnitService) {
+                             LogisticUnitService logisticUnitService, StorageService storageService) {
         this.packageService = packageService;
         this.addressService = addressService;
         this.paymentService = paymentService;
         this.stepService = stepService;
         this.logisticUnitService = logisticUnitService;
+        this.storageService = storageService;
     }
 
     @PostMapping("/insertPackage")
@@ -74,6 +72,15 @@ public class PackageController {
         return packageService.selectAllPackages();
     }
 
+    @GetMapping("/displayPackagesByEmployeeID")
+    public List<EmployeePackageDTO> displayPackagesByEmployeeID(@RequestParam int employeeID) {
+
+        List<EmployeePackageDTO> employeePackageList = new ArrayList<>();
+        List<EmployeePackageDTO> packages = packageService.getPackagesInStorageByEmployeeID(employeeID);
+
+        return packages;
+    }
+
     Optional<Package> getPackageById(int packageID) {
         return packageService.getPackageById(packageID);
     }
@@ -97,4 +104,5 @@ public class PackageController {
             this.employeeID = employeeID;
         }
     }
+
 }

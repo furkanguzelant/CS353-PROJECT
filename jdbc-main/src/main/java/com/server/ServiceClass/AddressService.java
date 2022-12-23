@@ -28,4 +28,8 @@ public class AddressService {
         return addressDao.getAddressIdListOfCustomer(customerID);
     }
 
+    public Address getAddressByAddressID(int addressID) {
+        return addressDao.getAddressByAddressID(addressID);
+    }
+
 }

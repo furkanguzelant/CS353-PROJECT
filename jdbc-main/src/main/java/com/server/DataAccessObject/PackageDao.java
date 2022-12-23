@@ -1,5 +1,6 @@
 package com.server.DataAccessObject;
 
+import com.server.DTO.EmployeePackageDTO;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
 
@@ -17,6 +18,6 @@ public interface PackageDao {
     List<Step> getStepsOfPackage(int packageID);
 
     List<Package> getPackagesByCustomerId(int userID);
-
+    public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID);
 
 }

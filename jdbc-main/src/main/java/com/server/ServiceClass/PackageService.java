@@ -1,5 +1,6 @@
 package com.server.ServiceClass;
 
+import com.server.DTO.EmployeePackageDTO;
 import com.server.DataAccessObject.PackageDao;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
@@ -35,5 +36,9 @@ public class PackageService {
 
     public List<Package> getPackagesByCustomerId(int userID){
         return packageDao.getPackagesByCustomerId(userID);
+    }
+
+    public  List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+        return packageDao.getPackagesInStorageByEmployeeID(employeeID);
     }
 }

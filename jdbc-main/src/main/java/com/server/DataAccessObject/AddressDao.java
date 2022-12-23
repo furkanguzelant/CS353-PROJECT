@@ -10,4 +10,5 @@ public interface AddressDao {
     int insertAddress(Address address) ;
     void bindAddressToCustomer( int addressID, int customerID );
     List<Integer> getAddressIdListOfCustomer(int customerID);
+    Address getAddressByAddressID(int addressID);
 }
