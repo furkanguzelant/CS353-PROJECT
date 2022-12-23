@@ -1,5 +1,7 @@
 package com.server.ModelClass;
 
+import com.server.Enums.ComplaintType;
+
 public class Complaint {
 
     enum Type {BrokenPackage, LatePackage, LostPackage}
@@ -7,13 +9,13 @@ public class Complaint {
     private int ComplaintID;
     private int packageID;
     private int registeredCustomerID;
-    private Type typeOfComplaint;
+    private ComplaintType typeOfComplaint;
     private String message;
 
     public Complaint(int complaintID,
                      int packageID,
                      int registeredCustomerID,
-                     Type typeOfComplaint,
+                     ComplaintType typeOfComplaint,
                      String message) {
         ComplaintID = complaintID;
         this.packageID = packageID;
@@ -46,11 +48,11 @@ public class Complaint {
         this.registeredCustomerID = registeredCustomerID;
     }
 
-    public Type getTypeOfComplaint() {
+    public ComplaintType getTypeOfComplaint() {
         return typeOfComplaint;
     }
 
-    public void setTypeOfComplaint(Type typeOfComplaint) {
+    public void setTypeOfComplaint(ComplaintType typeOfComplaint) {
         this.typeOfComplaint = typeOfComplaint;
     }
 

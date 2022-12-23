@@ -1,16 +1,16 @@
 package com.server.Enums;
 
-public enum PackageStatus {
+public enum ComplaintType {
+    Broken, Undelivered, LateDelivered, MissingItems, Other;
 
-    Delivered, InDistribution, InBranch;
-
-    public static PackageStatus fromInteger(int enumNumber) {
+    public static ComplaintType fromInteger(int enumNumber) {
         return switch (enumNumber) {
-            case 0 -> Delivered;
-            case 1 -> InDistribution;
-            case 2 -> InBranch;
+            case 0 -> Broken;
+            case 1 -> Undelivered;
+            case 2 -> LateDelivered;
+            case 3 -> MissingItems;
+            case 4 -> Other;
             default -> null;
         };
-
     }
 }

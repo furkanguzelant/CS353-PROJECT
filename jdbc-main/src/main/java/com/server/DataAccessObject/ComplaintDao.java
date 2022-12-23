@@ -13,6 +13,6 @@ public interface ComplaintDao {
 
     Optional<Complaint> getComplaintById(int complaintID);
 
-    Optional<Complaint> getComplaintByPackageId(int packageID);
+    List<Complaint> getComplaintByPackageId(int packageID);
 
 }
