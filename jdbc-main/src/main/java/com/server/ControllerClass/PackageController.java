@@ -59,7 +59,7 @@ public class PackageController {
 
             Step step = new Step(null,
                     Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                    ProcessType.Receive, packageID, null, logisticUnit.getAddressID());
+                    ProcessType.Receive, packageID, senderAddressList.get(0), logisticUnit.getAddressID());
 
             stepService.createStep(step);
             return new ResponseEntity<>(Map.of("statusMessage", "Package created successfully"), HttpStatus.OK);
