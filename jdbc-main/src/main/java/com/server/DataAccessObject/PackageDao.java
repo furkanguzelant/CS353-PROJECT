@@ -13,11 +13,13 @@ public interface PackageDao {
 
     List<Package> selectAllPackages();
 
-    Optional<Package> getPackageById(int packageID);
+    Package getPackageById(int packageID);
 
     List<Step> getStepsOfPackage(int packageID);
 
     List<Package> getPackagesByCustomerId(int userID);
-    public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID);
+    List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID);
+    void assignPackageToCourier(int packageID, int courierID);
+    void updatePackageStatus(int packageID, int packageStatus);
 
 }

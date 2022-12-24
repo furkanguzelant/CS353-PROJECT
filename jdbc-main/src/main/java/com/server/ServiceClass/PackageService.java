@@ -26,7 +26,7 @@ public class PackageService {
         return packageDao.selectAllPackages();
     }
 
-    public Optional<Package> getPackageById(int packageID){
+    public Package getPackageById(int packageID){
         return packageDao.getPackageById(packageID);
     }
 
@@ -40,5 +40,13 @@ public class PackageService {
 
     public  List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
         return packageDao.getPackagesInStorageByEmployeeID(employeeID);
+    }
+
+    public void assignPackageToCourier(int packageID, int courierID) {
+        packageDao.assignPackageToCourier(packageID, courierID);
+    }
+
+    public void  updatePackageStatus(int packageID, int packageStatus) {
+        packageDao.updatePackageStatus(packageID, packageStatus);
     }
 }

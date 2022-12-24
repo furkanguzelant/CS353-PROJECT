@@ -1,6 +1,7 @@
 package com.server.ControllerClass;
 
 import com.server.DTO.EmployeePackageDTO;
+import com.server.Enums.PackageStatus;
 import com.server.Enums.ProcessType;
 import com.server.ModelClass.*;
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
@@ -9,6 +10,7 @@ import com.server.ModelClass.Users.User;
 import com.server.ServiceClass.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -57,7 +59,7 @@ public class PackageController {
 
             Step step = new Step(null,
                     Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                    ProcessType.Receive, packageID, logisticUnit.getAddressID(), null);
+                    ProcessType.Receive, packageID, null, logisticUnit.getAddressID());
 
             stepService.createStep(step);
             return new ResponseEntity<>(Map.of("statusMessage", "Package created successfully"), HttpStatus.OK);
@@ -81,7 +83,51 @@ public class PackageController {
         return packages;
     }
 
-    Optional<Package> getPackageById(int packageID) {
+
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> assignPackageToCourier(@RequestBody List<Integer> packageIDList,
+                                                                      @RequestParam Integer courierID,
+                                                                      @RequestParam @Nullable Integer logisticUnitID,
+                                                                      @RequestParam Integer employeeID) {
+
+        try {
+            LogisticUnit logisticUnit = logisticUnitService.getLogisticUnitByEmployeeID(employeeID);
+            for (Integer packageID : packageIDList) {
+                Integer nextAddressID;
+                ProcessType status;
+                if (logisticUnitID != null && logisticUnitID != 0) {
+                    nextAddressID = logisticUnitService.getAddressIDOfLogisticUnit(logisticUnitID);
+                    status = ProcessType.Transfer;
+                } else {
+                    nextAddressID = packageService.getPackageById(packageID).getReceiverAddressID();
+                    status = ProcessType.Deliver;
+                }
+                packageService.assignPackageToCourier(packageID, courierID);
+                Step step = new Step(null,
+                        Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                        status, packageID, logisticUnit.getAddressID(), nextAddressID);
+                stepService.createStep(step);
+            }
+            return new ResponseEntity<>(Map.of("statusMessage", "Packages are assigned to courier " + courierID + " successfully"), HttpStatus.OK);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Packages could not be assigned"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/updatePackageStatus")
+    public ResponseEntity<Map<String, Object>> updatePackageStatus(int packageID, int packageStatus) {
+        try {
+            packageService.updatePackageStatus(packageID, packageStatus);
+            return new ResponseEntity<>(Map.of("statusMessage", "Package status updated"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Package status could not be updated"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    Package getPackageById(int packageID) {
         return packageService.getPackageById(packageID);
     }
 

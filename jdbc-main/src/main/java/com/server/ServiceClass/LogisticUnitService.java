@@ -3,6 +3,7 @@ package com.server.ServiceClass;
 import com.server.DataAccessObject.LogisticUnitDao;
 import com.server.DataAccessObject.UserDao;
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
+import com.server.ModelClass.Users.User;
 import org.apache.juli.logging.Log;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,14 @@ public class LogisticUnitService {
 
     public LogisticUnit getLogisticUnitByEmployeeID(int employeeID) {
         return logisticUnitDao.getLogisticUnitByEmployeeID(employeeID);
+    }
+
+    public List<User> getCouriersByEmployeeID(int employeeID) {
+        return logisticUnitDao.getCouriersByEmployeeID(employeeID);
+    }
+
+    public Integer getAddressIDOfLogisticUnit(int logisticUnitID) {
+        return logisticUnitDao.getAddressIDOfLogisticUnit(logisticUnitID);
     }
 
 }
