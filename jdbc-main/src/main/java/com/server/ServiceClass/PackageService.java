@@ -56,4 +56,12 @@ public class PackageService {
     public List<PackageDTO> getSentPackagesOfCustomer(int customerID) {
         return packageDao.getSentPackagesOfCustomer( customerID);
     }
+
+    public List<PackageDTO> getPackagesFilterByWeight(int upperWeightLimit, int lowerWeightLimit) {
+        return packageDao.getPackagesFilterByWeight(upperWeightLimit,lowerWeightLimit);
+    }
+
+    public List<PackageDTO> getPackagesFilterByCity(String inputString) {
+        return packageDao.getPackagesFilterByCity(inputString);
+    }
 }

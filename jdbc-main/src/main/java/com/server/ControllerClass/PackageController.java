@@ -147,6 +147,28 @@ public class PackageController {
         }
     }
 
+    @GetMapping("/getPackagesFilterByWeight")
+    public ResponseEntity<Map<String, Object>> getPackagesFilterByWeight(@RequestParam int upperWeightLimit, @RequestParam int lowerWeightLimit) {
+        try {
+            List<PackageDTO> packages = packageService.getPackagesFilterByWeight(upperWeightLimit,lowerWeightLimit);
+            return new ResponseEntity<>(Map.of("statusMessage", "Successfully fetched", "List", packages), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetch failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getPackagesFilterByCity")
+    public ResponseEntity<Map<String, Object>> getPackagesFilterByCity(@RequestParam String inputString) {
+        try {
+            List<PackageDTO> packages = packageService.getPackagesFilterByCity(inputString);
+            return new ResponseEntity<>(Map.of("statusMessage", "Successfully fetched", "List", packages), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetch failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     private static class NewPackageDTO {
         private Package pack;
         private Payment payment;

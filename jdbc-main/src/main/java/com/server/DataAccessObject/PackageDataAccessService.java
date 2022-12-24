@@ -295,6 +295,55 @@ public class PackageDataAccessService implements PackageDao {
         }
         return packageDTOList;
     }
+
+    @Override
+    public List<PackageDTO> getPackagesFilterByWeight(int upperWeightLimit, int lowerWeightLimit) {
+        var sql = """
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                  storageID, price, type, payment.status as payment_status, addressid, country, city,
+                 district, zipcode, addressinfo
+                FROM package, payment, address
+                WHERE weight between ? and ?
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID
+                 """;
+
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), lowerWeightLimit, upperWeightLimit);
+
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+        return packageDTOList;
+    }
+
+    @Override
+    public List<PackageDTO> getPackagesFilterByCity(String inputString) {
+
+        inputString = "%"+ inputString +"%";
+
+        var sql = """
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                storageID, price, type, payment.status as payment_status, addressid, country, city,
+                district, zipcode, addressinfo
+                FROM (package natural join storage) natural join logisticunit, payment, address
+                WHERE (address.city like ?) OR (logisticunit.name like ?)
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID
+                """;
+
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), inputString,inputString);
+
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+        return packageDTOList;
+    }
 }
 
 

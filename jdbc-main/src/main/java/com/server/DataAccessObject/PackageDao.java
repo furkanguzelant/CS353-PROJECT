@@ -24,4 +24,8 @@ public interface PackageDao {
     List<PackageDTO> getIncomingPackagesOfCustomer(int customerID);
 
     List<PackageDTO> getSentPackagesOfCustomer(int customerID);
+
+    List<PackageDTO> getPackagesFilterByWeight(int upperWeightLimit, int lowerWeightLimit);
+
+    List<PackageDTO> getPackagesFilterByCity(String inputString);
 }
