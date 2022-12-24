@@ -1,6 +1,7 @@
 package com.server.ControllerClass;
 
 import com.server.DTO.PackageDTO;
+import com.server.DTO.PackageStatisticsInfo;
 import com.server.Enums.ProcessType;
 import com.server.ModelClass.*;
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
@@ -169,6 +170,18 @@ public class PackageController {
         }
     }
 
+    @GetMapping("/getPackageStatistics")
+    public ResponseEntity<Map<String, Object>> getPackageStatistics() {
+        try {
+            PackageStatisticsInfo packageStatisticsInfo = packageService.getPackageStatistics();
+            return new ResponseEntity<>(Map.of("statusMessage", "Statistics fetched successfully",
+                    "packageStatisticsInfo", packageStatisticsInfo), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetching package statistics failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     private static class NewPackageDTO {
         private Package pack;
         private Payment payment;
@@ -180,4 +193,5 @@ public class PackageController {
             this.employeeID = employeeID;
         }
     }
+
 }

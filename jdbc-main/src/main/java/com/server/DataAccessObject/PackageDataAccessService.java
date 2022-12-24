@@ -1,12 +1,14 @@
 package com.server.DataAccessObject;
 
 import com.server.DTO.PackageDTO;
+import com.server.DTO.PackageStatisticsInfo;
 import com.server.Enums.*;
 import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Payment;
 import com.server.ModelClass.Step;
 import com.server.RowMappers.EmployeePackageDTORowMapper;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -330,7 +332,7 @@ public class PackageDataAccessService implements PackageDao {
                 storageID, price, type, payment.status as payment_status, addressid, country, city,
                 district, zipcode, addressinfo
                 FROM package, payment, address
-                WHERE (address.city like ?)
+                WHERE (LOWER(address.city) like LOWER(?))
                 AND package.packageID = payment.packageID 
                 AND address.addressID = package.receiverAddressID
                 """;
@@ -343,6 +345,66 @@ public class PackageDataAccessService implements PackageDao {
             packageDTOList.get(i).getPack().setTags(tags);
         }
         return packageDTOList;
+    }
+
+    public PackageStatisticsInfo getPackageStatistics() {
+        PackageStatisticsInfo statisticsInfo = new PackageStatisticsInfo();
+        var sql = """
+                WITH city_number(city, packageNo) AS
+                    (SELECT city, count(*)
+                    FROM package, address
+                    WHERE package.receiverAddressID = addressID
+                    GROUP BY city)
+                SELECT city
+                FROM city_number
+                WHERE packageNo = (SELECT max(packageNo) FROM city_number); 
+                 """;
+
+        String city = jdbcTemplate.queryForObject(sql, String.class);
+
+        var sql5 = """
+                WITH logisticUnit_packageNo(logisticUnitName, packageNo) AS 
+                    (SELECT logisticunit.name, count(*)
+                    FROM logisticunit natural join storage natural join package
+                     GROUP BY logisticunit.name)
+                SELECT logisticUnitName
+                FROM logisticUnit_packageNo
+                WHERE packageNo = (SELECT max(packageNo) FROM logisticUnit_packageNo); 
+                 """;
+
+        String logisticUnit = jdbcTemplate.queryForObject(sql5, String.class);
+
+
+        var sql2 = """
+                SELECT count(*)
+                FROM package
+                 """;
+
+        Integer totalPackages = jdbcTemplate.queryForObject(sql2, Integer.class);
+
+        var sql3 = """
+                SELECT count(*)
+                FROM package
+                WHERE status = '1';
+                 """;
+
+        Integer inDistribution = jdbcTemplate.queryForObject(sql3, Integer.class);
+
+        var sql4 = """
+                SELECT count(*)
+                FROM package
+                WHERE status = '2';
+                 """;
+
+        Integer inBranch = jdbcTemplate.queryForObject(sql4, Integer.class);
+
+
+        statisticsInfo.setMaxPackageCity(city);
+        statisticsInfo.setMaxLogisticUnit(logisticUnit);
+        statisticsInfo.setTotalPackages(totalPackages);
+        statisticsInfo.setNumberOfPackageInDistribution(inDistribution);
+        statisticsInfo.setNumberOfPackageInBranch(inBranch);
+        return statisticsInfo;
     }
 }
 

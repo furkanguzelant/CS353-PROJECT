@@ -1,6 +1,7 @@
 package com.server.ServiceClass;
 
 import com.server.DTO.PackageDTO;
+import com.server.DTO.PackageStatisticsInfo;
 import com.server.DataAccessObject.PackageDao;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
@@ -63,5 +64,9 @@ public class PackageService {
 
     public List<PackageDTO> getPackagesFilterByCity(String inputString) {
         return packageDao.getPackagesFilterByCity(inputString);
+    }
+
+    public PackageStatisticsInfo getPackageStatistics() {
+        return packageDao.getPackageStatistics();
     }
 }

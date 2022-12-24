@@ -393,6 +393,3 @@ values (4, currval('package_packageid_seq'), 2, 'Paketim nerde, noluyor yahu !?'
 
 
 
-SELECT *
-FROM employee natural join storage natural join package, payment, address
-WHERE employee.userID = 1 AND package.packageID = payment.packageID AND address.addressID = package.receiverAddressID

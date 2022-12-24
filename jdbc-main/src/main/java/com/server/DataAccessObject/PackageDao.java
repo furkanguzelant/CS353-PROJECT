@@ -1,6 +1,7 @@
 package com.server.DataAccessObject;
 
 import com.server.DTO.PackageDTO;
+import com.server.DTO.PackageStatisticsInfo;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
 
@@ -28,4 +29,5 @@ public interface PackageDao {
     List<PackageDTO> getPackagesFilterByWeight(int upperWeightLimit, int lowerWeightLimit);
 
     List<PackageDTO> getPackagesFilterByCity(String inputString);
+    PackageStatisticsInfo getPackageStatistics();
 }
