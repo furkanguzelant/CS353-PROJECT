@@ -329,13 +329,13 @@ public class PackageDataAccessService implements PackageDao {
                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
                 storageID, price, type, payment.status as payment_status, addressid, country, city,
                 district, zipcode, addressinfo
-                FROM (package natural join storage) natural join logisticunit, payment, address
-                WHERE (address.city like ?) OR (logisticunit.name like ?)
+                FROM package, payment, address
+                WHERE (address.city like ?)
                 AND package.packageID = payment.packageID 
                 AND address.addressID = package.receiverAddressID
                 """;
 
-        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), inputString,inputString);
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), inputString);
 
         for (int i = 0; i < packageDTOList.size(); i++) {
             int packageID = packageDTOList.get(i).getPack().getPackageID();
