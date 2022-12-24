@@ -78,4 +78,17 @@ public class VehicleController {
         LogisticUnit logisticUnit = logisticUnitService.getLogisticUnitByEmployeeID(employeeID);
         return vehicleService.getVehiclesOfLogisticUnit(logisticUnit.getLogisticUnitID());
     }
+
+    @PutMapping("/assignVehicleToCourier")
+    public ResponseEntity<Map<String, Object>> assignVehicleToCourier(String licensePlate, Integer courierID) {
+
+        try {
+            vehicleService.assignVehicleToCourier(licensePlate, courierID);
+            return new ResponseEntity<>(Map.of("statusMessage", "Vehicle " +
+                    licensePlate + " assigned to courier with ID: " + courierID), HttpStatus.OK);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Vehicle is not empty"), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

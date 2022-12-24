@@ -97,14 +97,14 @@ public class VehicleDataAccessService implements VehicleDao {
     public void addPackageToVehicle(int packageID, String licensePlate) {
         String sql = """
                  UPDATE package
-                 SET licensePlate = ?
+                 SET licensePlate = ?, status = ?
                  WHERE packageID = ?
                  """;
 
         jdbcTemplate.update(
                 sql,
-                packageID,
-                licensePlate
+                licensePlate, VehicleStatus.Busy,
+                packageID
         );
 
     }
@@ -128,7 +128,7 @@ public class VehicleDataAccessService implements VehicleDao {
         String sql = """
                  UPDATE vehicle
                  SET courierID = ?
-                 WHERE licensePlate = ?
+                 WHERE licensePlate = ? AND currentWeight = 0
                  """;
 
         jdbcTemplate.update(
@@ -189,6 +189,8 @@ public class VehicleDataAccessService implements VehicleDao {
 
         return jdbcTemplate.query(sql, new VehicleRowMapper(), logisticUnitID);
     }
+
+
 
 
 }
