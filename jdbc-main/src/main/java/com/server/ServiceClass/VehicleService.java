@@ -50,6 +50,9 @@ public class VehicleService {
         vehicleDao.addPackageToVehicle(packageID,licensePlate);
     }
 
+    public List<Vehicle> getVehiclesOfLogisticUnit(int logisticUnitID) {
+        return vehicleDao.getVehiclesOfLogisticUnit(logisticUnitID);
+    }
 
 
 }

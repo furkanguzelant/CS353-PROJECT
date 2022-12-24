@@ -73,4 +73,9 @@ public class VehicleController {
         return vehicleService.getPackagesOfCourierInsideVehicle(courierID);
     }
 
+    @GetMapping("/getVehiclesOfLogisticUnit")
+    public List<Vehicle> getVehiclesOfLogisticUnit(int employeeID) {
+        LogisticUnit logisticUnit = logisticUnitService.getLogisticUnitByEmployeeID(employeeID);
+        return vehicleService.getVehiclesOfLogisticUnit(logisticUnit.getLogisticUnitID());
+    }
 }

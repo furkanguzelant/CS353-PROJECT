@@ -24,6 +24,8 @@ public interface VehicleDao {
 
     List<Package> getPackagesOfCourierInsideVehicle(int courierID);
 
+    List<Vehicle> getVehiclesOfLogisticUnit(int logisticUnitID);
+
 
 
 }
