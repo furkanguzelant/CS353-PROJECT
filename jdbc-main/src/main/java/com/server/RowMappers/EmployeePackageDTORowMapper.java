@@ -1,26 +1,23 @@
 package com.server.RowMappers;
 
-import com.server.DTO.EmployeePackageDTO;
-import com.server.DataAccessObject.PackageDataAccessService;
+import com.server.DTO.PackageDTO;
 import com.server.Enums.PackageStatus;
 import com.server.Enums.PaymentStatus;
 import com.server.Enums.PaymentType;
-import com.server.Enums.VehicleStatus;
 import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Payment;
-import com.server.ModelClass.Vehicle;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EmployeePackageDTORowMapper implements RowMapper<EmployeePackageDTO> {
+public class EmployeePackageDTORowMapper implements RowMapper<PackageDTO> {
 
 
     @Override
-    public EmployeePackageDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new EmployeePackageDTO(
+    public PackageDTO mapRow(ResultSet resultSet, int i) throws SQLException {
+        return new PackageDTO(
                 new Package(resultSet.getInt("packageID"),
                         resultSet.getInt("weight"),
                         resultSet.getInt("volume"),

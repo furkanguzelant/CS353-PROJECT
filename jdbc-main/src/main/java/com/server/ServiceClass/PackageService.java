@@ -1,13 +1,12 @@
 package com.server.ServiceClass;
 
-import com.server.DTO.EmployeePackageDTO;
+import com.server.DTO.PackageDTO;
 import com.server.DataAccessObject.PackageDao;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PackageService {
@@ -38,7 +37,7 @@ public class PackageService {
         return packageDao.getPackagesByCustomerId(userID);
     }
 
-    public  List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+    public  List<PackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
         return packageDao.getPackagesInStorageByEmployeeID(employeeID);
     }
 
@@ -48,5 +47,13 @@ public class PackageService {
 
     public void  updatePackageStatus(int packageID, int packageStatus) {
         packageDao.updatePackageStatus(packageID, packageStatus);
+    }
+
+    public List<PackageDTO> getIncomingPackagesOfCustomer(int customerID) {
+        return packageDao.getIncomingPackagesOfCustomer( customerID);
+    }
+
+    public List<PackageDTO> getSentPackagesOfCustomer(int customerID) {
+        return packageDao.getSentPackagesOfCustomer( customerID);
     }
 }

@@ -4,12 +4,12 @@ import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Payment;
 
-public class EmployeePackageDTO {
+public class PackageDTO {
     private Package pack;
     private Payment payment;
     private Address address;
 
-    public EmployeePackageDTO(Package pack, Payment payment, Address address) {
+    public PackageDTO(Package pack, Payment payment, Address address) {
         this.pack = pack;
         this.payment = payment;
         this.address = address;

@@ -1,10 +1,8 @@
 package com.server.DataAccessObject;
 
-import com.server.DTO.EmployeePackageDTO;
+import com.server.DTO.PackageDTO;
 import com.server.Enums.*;
-import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
-import com.server.ModelClass.Payment;
 import com.server.ModelClass.Step;
 import com.server.RowMappers.EmployeePackageDTORowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class PackageDataAccessService implements PackageDao {
@@ -197,7 +194,7 @@ public class PackageDataAccessService implements PackageDao {
     }
 
     @Override
-    public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+    public List<PackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
         var sql = """
                 SELECT package.packageID, weight, volume, package.status as package_status,
                  senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
@@ -210,14 +207,14 @@ public class PackageDataAccessService implements PackageDao {
                 AND package.packageID not in (SELECT packageid FROM package WHERE courierid IS NOT NULL )
                  """;
 
-        List<EmployeePackageDTO> employeePackageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), employeeID);
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), employeeID);
 
-        for (int i = 0; i < employeePackageDTOList.size(); i++) {
-            int packageID = employeePackageDTOList.get(i).getPack().getPackageID();
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
             List<String> tags = getTagsOfPackage(packageID);
-            employeePackageDTOList.get(i).getPack().setTags(tags);
+            packageDTOList.get(i).getPack().setTags(tags);
         }
-        return employeePackageDTOList;
+        return packageDTOList;
     }
 
     public void assignPackageToCourier(int packageID, int courierID) {
@@ -251,7 +248,51 @@ public class PackageDataAccessService implements PackageDao {
         );
     }
 
+    @Override
+    public List<PackageDTO> getIncomingPackagesOfCustomer(int customerID) {
+        var sql = """
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                  storageID, price, type, payment.status as payment_status, addressid, country, city,
+                 district, zipcode, addressinfo
+                FROM package, payment, address
+                WHERE package.receiverid = ?
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID
+                 """;
 
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), customerID);
+
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+        return packageDTOList;
+    }
+
+    @Override
+    public List<PackageDTO> getSentPackagesOfCustomer(int customerID) {
+        var sql = """
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                  storageID, price, type, payment.status as payment_status, addressid, country, city,
+                 district, zipcode, addressinfo
+                FROM package, payment, address
+                WHERE package.senderid = ?
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID
+                 """;
+
+        List<PackageDTO> packageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), customerID);
+
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+        return packageDTOList;
+    }
 }
 
 
