@@ -180,5 +180,15 @@ public class VehicleDataAccessService implements VehicleDao {
 
     }
 
+    public List<Vehicle> getVehiclesOfLogisticUnit(int logisticUnitID) {
+        var sql = """
+                SELECT *
+                FROM  vehicle natural join logisticUnit
+                WHERE logisticUnitID = ?
+                 """;
+
+        return jdbcTemplate.query(sql, new VehicleRowMapper(), logisticUnitID);
+    }
+
 
 }
