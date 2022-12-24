@@ -42,7 +42,7 @@ public class StorageController {
     }
 
     @PostMapping(path="insertPackageToStorage")
-    public ResponseEntity<Map<String, Object>> getStoragesByEmployeeID (@RequestParam int packageID, @RequestParam int storageID) {
+    public ResponseEntity<Map<String, Object>> insertPackageToStorage (@RequestParam int packageID, @RequestParam int storageID) {
         try {
             storageService.insertPackageToStorage(packageID,storageID);
             return new ResponseEntity<>(Map.of("statusMessage", "Package has been inserted to the storage successfully"), HttpStatus.OK);

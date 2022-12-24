@@ -22,9 +22,8 @@ import java.util.*;
 @RequestMapping(path = "api/package")
 public class PackageController {
 
-        private final PackageService packageService;
-        private final StorageService storageService;
     private final PackageService packageService;
+    private final StorageService storageService;
     private final AddressService addressService;
     private final PaymentService paymentService;
     private final StepService stepService;
@@ -67,86 +66,76 @@ public class PackageController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Map.of("statusMessage", "Package could not be created"), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping
-    List<Package> selectAllPackages() {
-        return packageService.selectAllPackages();
-    }
+        @GetMapping
+        List<Package> selectAllPackages () {
+            return packageService.selectAllPackages();
+        }
 
 
-    @GetMapping("/displayPackagesByEmployeeID")
-    public List<EmployeePackageDTO> displayPackagesByEmployeeID(@RequestParam int employeeID) {
+        @GetMapping("/displayPackagesByEmployeeID")
+        public List<EmployeePackageDTO> displayPackagesByEmployeeID ( @RequestParam int employeeID){
 
-        List<EmployeePackageDTO> employeePackageList = new ArrayList<>();
-        List<EmployeePackageDTO> packages = packageService.getPackagesInStorageByEmployeeID(employeeID);
+            List<EmployeePackageDTO> employeePackageList = new ArrayList<>();
+            List<EmployeePackageDTO> packages = packageService.getPackagesInStorageByEmployeeID(employeeID);
 
-        return packages;
-    }
+            return packages;
+        }
 
 
-    @PutMapping
-    public ResponseEntity<Map<String, Object>> assignPackageToCourier(@RequestBody List<Integer> packageIDList,
-                                                                      @RequestParam Integer courierID,
-                                                                      @RequestParam @Nullable Integer logisticUnitID,
-                                                                      @RequestParam Integer employeeID) {
+        @PutMapping
+        public ResponseEntity<Map<String, Object>> assignPackageToCourier (@RequestBody List < Integer > packageIDList,
+                @RequestParam Integer courierID,
+                @RequestParam @Nullable Integer logisticUnitID,
+                @RequestParam Integer employeeID){
 
-        try {
-            LogisticUnit logisticUnit = logisticUnitService.getLogisticUnitByEmployeeID(employeeID);
-            for (Integer packageID : packageIDList) {
-                Integer nextAddressID;
-                ProcessType status;
-                if (logisticUnitID != null && logisticUnitID != 0) {
-                    nextAddressID = logisticUnitService.getAddressIDOfLogisticUnit(logisticUnitID);
-                    status = ProcessType.Transfer;
-                } else {
-                    nextAddressID = packageService.getPackageById(packageID).getReceiverAddressID();
-                    status = ProcessType.Deliver;
+            try {
+                LogisticUnit logisticUnit = logisticUnitService.getLogisticUnitByEmployeeID(employeeID);
+                for (Integer packageID : packageIDList) {
+                    Integer nextAddressID;
+                    ProcessType status;
+                    if (logisticUnitID != null && logisticUnitID != 0) {
+                        nextAddressID = logisticUnitService.getAddressIDOfLogisticUnit(logisticUnitID);
+                        status = ProcessType.Transfer;
+                    } else {
+                        nextAddressID = packageService.getPackageById(packageID).getReceiverAddressID();
+                        status = ProcessType.Deliver;
+                    }
+                    packageService.assignPackageToCourier(packageID, courierID);
+                    Step step = new Step(null,
+                            Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            status, packageID, logisticUnit.getAddressID(), nextAddressID);
+                    stepService.createStep(step);
                 }
-                packageService.assignPackageToCourier(packageID, courierID);
-                Step step = new Step(null,
-                        Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                        status, packageID, logisticUnit.getAddressID(), nextAddressID);
-                stepService.createStep(step);
+                return new ResponseEntity<>(Map.of("statusMessage", "Packages are assigned to courier " + courierID + " successfully"), HttpStatus.OK);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return new ResponseEntity<>(Map.of("statusMessage", "Packages could not be assigned"), HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(Map.of("statusMessage", "Packages are assigned to courier " + courierID + " successfully"), HttpStatus.OK);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity<>(Map.of("statusMessage", "Packages could not be assigned"), HttpStatus.BAD_REQUEST);
+        }
+
+        @PutMapping("/updatePackageStatus")
+        public ResponseEntity<Map<String, Object>> updatePackageStatus ( int packageID, int packageStatus){
+            try {
+                packageService.updatePackageStatus(packageID, packageStatus);
+                return new ResponseEntity<>(Map.of("statusMessage", "Package status updated"), HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(Map.of("statusMessage", "Package status could not be updated"), HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        private static class NewPackageDTO {
+            private Package pack;
+            private Payment payment;
+            private int employeeID;
+
+            public NewPackageDTO(Package pack, Payment payment, int employeeID) {
+                this.pack = pack;
+                this.payment = payment;
+                this.employeeID = employeeID;
+            }
         }
     }
-
-    @PutMapping("/updatePackageStatus")
-    public ResponseEntity<Map<String, Object>> updatePackageStatus(int packageID, int packageStatus) {
-        try {
-            packageService.updatePackageStatus(packageID, packageStatus);
-            return new ResponseEntity<>(Map.of("statusMessage", "Package status updated"), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(Map.of("statusMessage", "Package status could not be updated"), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
-    Package getPackageById(int packageID) {
-        return packageService.getPackageById(packageID);
-    }
-    List<Step> getStepsOfPackage(int packageID) {
-        return packageService.getStepsOfPackage(packageID);
-    }
-    List<Package> getPackagesByCustomerId(int userID) {
-        return packageService.getPackagesByCustomerId(userID);
-    }
-
-    private static class NewPackageDTO {
-        private Package pack;
-        private Payment payment;
-        private int employeeID;
-
-        public NewPackageDTO(Package pack, Payment payment, int employeeID) {
-            this.pack = pack;
-            this.payment = payment;
-            this.employeeID = employeeID;
-    }
-
-}
