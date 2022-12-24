@@ -5,19 +5,19 @@ import com.server.Enums.ProcessType;
 
 public class Step {
 
-    private int stepID;
+    private Integer stepID;
     private Date receive_date;
     private ProcessType processType;
-    private int packageID;
-    private int prevAddress;
-    private int nextAddress;
+    private Integer packageID;
+    private Integer prevAddress;
+    private Integer nextAddress;
 
-    public Step(int stepID,
+    public Step(Integer stepID,
                 Date receive_date,
                 ProcessType processType,
-                int packageID,
-                int prevAddress,
-                int nextAddress) {
+                Integer packageID,
+                Integer prevAddress,
+                Integer nextAddress) {
         this.stepID = stepID;
         this.receive_date = receive_date;
         this.processType = processType;
@@ -26,7 +26,7 @@ public class Step {
         this.nextAddress = nextAddress;
     }
 
-    public int getStepID() {
+    public Integer getStepID() {
         return stepID;
     }
 
@@ -50,7 +50,7 @@ public class Step {
         this.processType = processType;
     }
 
-    public int getPackageID() {
+    public Integer getPackageID() {
         return packageID;
     }
 
@@ -58,7 +58,7 @@ public class Step {
         this.packageID = packageID;
     }
 
-    public int getPrevAddress() {
+    public Integer getPrevAddress() {
         return prevAddress;
     }
 
@@ -66,7 +66,7 @@ public class Step {
         this.prevAddress = prevAddress;
     }
 
-    public int getNextAddress() {
+    public Integer getNextAddress() {
         return nextAddress;
     }
 

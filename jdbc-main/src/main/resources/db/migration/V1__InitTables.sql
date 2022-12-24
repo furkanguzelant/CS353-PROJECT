@@ -358,6 +358,12 @@ values ('Fragile');
 INSERT INTO tag(tag)
 values ('Flammable');
 
+INSERT INTO tag(tag)
+values ('Urgent');
+
+INSERT INTO tag(tag)
+values ('Food');
+
 INSERT INTO package_tag(packageID, tag)
 values (currval('package_packageid_seq'),'Fragile');
 
@@ -387,3 +393,6 @@ values (4, currval('package_packageid_seq'), 2, 'Paketim nerde, noluyor yahu !?'
 
 
 
+SELECT *
+FROM employee natural join storage natural join package, payment, address
+WHERE employee.userID = 1 AND package.packageID = payment.packageID AND address.addressID = package.receiverAddressID

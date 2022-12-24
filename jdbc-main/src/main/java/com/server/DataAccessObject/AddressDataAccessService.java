@@ -1,6 +1,11 @@
 package com.server.DataAccessObject;
 
 import com.server.ModelClass.Address;
+import com.server.ModelClass.Storage;
+import com.server.ModelClass.Users.RegisteredCustomer;
+import com.server.ModelClass.Users.User;
+import com.server.Utility.UserRoleConstraints;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -9,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.List;
 
 
 @Repository
@@ -59,5 +66,39 @@ public class AddressDataAccessService implements AddressDao {
                 """;
 
         jdbcTemplate.update(sql,customerID,addressID);
+    }
+
+    @Override
+    public List<Integer> getAddressIdListOfCustomer(int customerID) {
+        var sql = """
+                SELECT addressID
+                FROM customer_address
+                WHERE customerID = ?
+
+                 """;
+
+        return jdbcTemplate.queryForList(sql,Integer.class, customerID);
+
+    }
+
+    public Address getAddressByAddressID(int addressID) {
+
+        var sql = """
+                SELECT *
+                FROM address
+                WHERE addressID = ?
+
+                 """;
+
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            return new Address(
+                    resultSet.getInt("addressID"),
+                    resultSet.getString("country"),
+                    resultSet.getString("city"),
+                    resultSet.getString("district"),
+                    resultSet.getString("zipcode"),
+                    resultSet.getString("addressInfo")
+            );
+        }, addressID);
     }
 }

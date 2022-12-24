@@ -1,5 +1,6 @@
 package com.server.ServiceClass;
 
+import com.server.DTO.EmployeePackageDTO;
 import com.server.DataAccessObject.PackageDao;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Step;
@@ -17,15 +18,15 @@ public class PackageService {
         this.packageDao = packageDao;
     }
 
-    public void insertPackage(Package pack){
-        packageDao.insertPackage(pack);
+    public int insertPackage(Package pack){
+        return packageDao.insertPackage(pack);
     }
 
     public List<Package> selectAllPackages(){
         return packageDao.selectAllPackages();
     }
 
-    public Optional<Package> getPackageById(int packageID){
+    public Package getPackageById(int packageID){
         return packageDao.getPackageById(packageID);
     }
 
@@ -35,5 +36,17 @@ public class PackageService {
 
     public List<Package> getPackagesByCustomerId(int userID){
         return packageDao.getPackagesByCustomerId(userID);
+    }
+
+    public  List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+        return packageDao.getPackagesInStorageByEmployeeID(employeeID);
+    }
+
+    public void assignPackageToCourier(int packageID, int courierID) {
+        packageDao.assignPackageToCourier(packageID, courierID);
+    }
+
+    public void  updatePackageStatus(int packageID, int packageStatus) {
+        packageDao.updatePackageStatus(packageID, packageStatus);
     }
 }

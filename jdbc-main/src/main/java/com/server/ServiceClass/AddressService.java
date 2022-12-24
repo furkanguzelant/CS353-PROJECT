@@ -5,6 +5,7 @@ import com.server.ModelClass.Address;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class AddressService {
@@ -23,5 +24,12 @@ public class AddressService {
         addressDao.bindAddressToCustomer( addressId,customerId);
     }
 
+    public List<Integer> getAddressIdListOfCustomer(int customerID) {
+        return addressDao.getAddressIdListOfCustomer(customerID);
+    }
+
+    public Address getAddressByAddressID(int addressID) {
+        return addressDao.getAddressByAddressID(addressID);
+    }
 
 }

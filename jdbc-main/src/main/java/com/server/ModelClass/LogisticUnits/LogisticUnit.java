@@ -37,4 +37,12 @@ public class LogisticUnit {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Integer getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(Integer addressID) {
+        this.addressID = addressID;
+    }
 }

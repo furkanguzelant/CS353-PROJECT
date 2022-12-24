@@ -1,12 +1,19 @@
 package com.server.DataAccessObject;
 
-import com.server.Enums.PackageStatus;
-import com.server.Enums.ProcessType;
+import com.server.DTO.EmployeePackageDTO;
+import com.server.Enums.*;
+import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
+import com.server.ModelClass.Payment;
 import com.server.ModelClass.Step;
+import com.server.RowMappers.EmployeePackageDTORowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,24 +27,36 @@ public class PackageDataAccessService implements PackageDao {
 
 
     @Override
-    public void insertPackage(Package pack) {
+    public int insertPackage(Package pack) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         String sql = """
-                INSERT INTO package(packageID, weight, volume, status, senderAddressID, receiverAddressID, licensePlate, senderid, receiverid)
+                INSERT INTO package(weight, volume, status, senderAddressID, receiverAddressID, licensePlate, senderid, receiverid, storageid)
                 VALUES (?,?,?,?,?,?,?,?,?);
                  """;
 
-        jdbcTemplate.update(
-                sql,
-                pack.getPackageID(),
-                pack.getWeight(),
-                pack.getVolume(),
-                pack.getStatus(),
-                pack.getSenderAddressID(),
-                pack.getReceiverAddressID(),
-                pack.getLicencePlate(),
-                pack.getSenderID(),
-                pack.getReceiverID()
-        );
+        jdbcTemplate.update(conn -> {
+
+            // Pre-compiling SQL
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            // Set parameters
+            preparedStatement.setInt(1, pack.getWeight());
+            preparedStatement.setInt(2, pack.getVolume());
+            preparedStatement.setInt(3, pack.getStatus().ordinal());
+            preparedStatement.setInt(4, pack.getSenderAddressID());
+            preparedStatement.setInt(5, pack.getReceiverAddressID());
+            preparedStatement.setString(6, pack.getLicencePlate());
+            preparedStatement.setInt(7, pack.getSenderID());
+            preparedStatement.setInt(8, pack.getReceiverID());
+            preparedStatement.setInt(9, pack.getStorageID());
+
+            return preparedStatement;
+
+        }, keyHolder);
+
+        Integer id = (Integer) keyHolder.getKeys().get("packageid");
+        System.out.println(id);
 
         String sql2 = """
                 INSERT INTO package_tag(packageID, tag)
@@ -47,10 +66,11 @@ public class PackageDataAccessService implements PackageDao {
         for (int i = 0; i < pack.getTags().size(); i++) {
             jdbcTemplate.update(
                     sql2,
-                    pack.getPackageID(),
+                    id,
                     pack.getTags().get(i)
             );
         }
+        return id;
     }
 
     @Override
@@ -81,7 +101,7 @@ public class PackageDataAccessService implements PackageDao {
     }
 
     @Override
-    public Optional<Package> getPackageById(int packageID) {
+    public Package getPackageById(int packageID) {
         var sql = """
                 SELECT *
                 FROM package
@@ -89,7 +109,7 @@ public class PackageDataAccessService implements PackageDao {
                  """;
 
 
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
                     return new Package(
                             resultSet.getInt("packageID"),
                             resultSet.getInt("weight"),
@@ -106,9 +126,8 @@ public class PackageDataAccessService implements PackageDao {
                             resultSet.getInt("receiverID"),
                             resultSet.getInt(("storageID")),
                             resultSet.getInt("courierID"));
-                }, packageID)
-                .stream()
-                .findFirst();
+                }, packageID);
+
     }
 
 
@@ -176,4 +195,74 @@ public class PackageDataAccessService implements PackageDao {
         );
 
     }
+
+    @Override
+    public List<EmployeePackageDTO> getPackagesInStorageByEmployeeID(int employeeID) {
+        var sql = """
+                SELECT package.packageID, weight, volume, package.status as package_status,
+                 senderAddressID, receiverAddressID, licensePlate, senderID, receiverID, courierID,
+                  storageID, price, type, payment.status as payment_status, addressid, country, city,
+                 district, zipcode, addressinfo
+                FROM employee natural join storage natural join package, payment, address
+                WHERE employee.userID = ?
+                AND package.packageID = payment.packageID 
+                AND address.addressID = package.receiverAddressID
+                AND package.packageID not in (SELECT packageid FROM package WHERE courierid IS NOT NULL )
+                 """;
+
+        List<EmployeePackageDTO> employeePackageDTOList = jdbcTemplate.query(sql, new EmployeePackageDTORowMapper(), employeeID);
+
+        for (int i = 0; i < employeePackageDTOList.size(); i++) {
+            int packageID = employeePackageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            employeePackageDTOList.get(i).getPack().setTags(tags);
+        }
+        return employeePackageDTOList;
+    }
+
+    public void assignPackageToCourier(int packageID, int courierID) {
+        var sql = """
+                UPDATE package
+                SET courierID = ?, status = ?
+                WHERE packageID = ?
+                 """;
+
+        jdbcTemplate.update(sql, courierID, PackageStatus.InDistribution.ordinal(), packageID);
+
+        var sql2 = """
+                UPDATE courier
+                SET status = ?
+                WHERE userID = ?
+                 """;
+
+        jdbcTemplate.update(sql2, CourierStatus.IN_DISTRIBUTION.ordinal(), courierID);
+
+    }
+
+    public void updatePackageStatus(int packageID, int packageStatus) {
+        String sql = """
+                UPDATE package
+                SET status = ?
+                WHERE packageID = ?
+                 """;
+        jdbcTemplate.update(
+                sql,
+                packageStatus, packageID
+        );
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

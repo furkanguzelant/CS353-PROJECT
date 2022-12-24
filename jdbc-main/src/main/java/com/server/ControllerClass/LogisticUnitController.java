@@ -1,6 +1,7 @@
 package com.server.ControllerClass;
 
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
+import com.server.ModelClass.Users.User;
 import com.server.ServiceClass.LogisticUnitService;
 import com.server.ServiceClass.UserService;
 import org.springframework.http.HttpStatus;
@@ -33,4 +34,12 @@ public class LogisticUnitController {
             return new ResponseEntity<>(Map.of("statusMessage", "Fetch operation failed"), HttpStatus.EXPECTATION_FAILED);
         }
     }
+
+    @GetMapping("/getCouriersByEmployeeID")
+    public ResponseEntity<Map<String, Object>> getCouriersByEmployeeID(int employeeID) {
+
+        List<User> couriers = logisticUnitService.getCouriersByEmployeeID(employeeID);
+        return  new ResponseEntity<>(Map.of("statusMessage", "Successfully fetched.", "couriers", couriers), HttpStatus.OK);
+    }
+
 }
