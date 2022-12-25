@@ -7,4 +7,5 @@ import java.util.List;
 public interface PaymentDao {
     void insertPayment(Payment payment);
     Payment getPaymentByPackageID(int packageID);
+    void updatePaymentStatus(int packageID, int paymentStatus);
 }

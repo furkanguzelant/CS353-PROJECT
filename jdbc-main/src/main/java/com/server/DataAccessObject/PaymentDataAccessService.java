@@ -51,6 +51,17 @@ public class PaymentDataAccessService implements PaymentDao {
 
     }
 
+    public void updatePaymentStatus(int packageID, int paymentStatus) {
+        String sql = """
+                UPDATE payment
+                SET status = ? 
+                WHERE packageID = ?
+                 """;
+
+        jdbcTemplate.update(sql, paymentStatus, packageID);
+
+    }
+
 
 
 

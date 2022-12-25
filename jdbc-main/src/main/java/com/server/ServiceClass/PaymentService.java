@@ -23,4 +23,8 @@ public class PaymentService {
     public Payment getPaymentByPackageID(int packageID) {
         return paymentDao.getPaymentByPackageID(packageID);
     }
+
+    public void updatePaymentStatus(int packageID, int paymentStatus) {
+        paymentDao.updatePaymentStatus(packageID, paymentStatus);
+    }
 }
