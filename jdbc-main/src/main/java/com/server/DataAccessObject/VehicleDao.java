@@ -28,6 +28,8 @@ public interface VehicleDao {
 
     void loadPackageToVehicle(int packageID, String licensePlate);
 
+    void removePackageFromVehicle(int packageID);
+
 
 
 }

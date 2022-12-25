@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -113,23 +114,23 @@ public class PackageDataAccessService implements PackageDao {
 
 
         return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
-                    return new Package(
-                            resultSet.getInt("packageID"),
-                            resultSet.getInt("weight"),
-                            resultSet.getInt("volume"),
-                            PackageStatus.fromInteger(
-                                    resultSet.getInt("status")
-                            ),
-                            getTagsOfPackage(resultSet.getInt("packageID"))
-                            ,
-                            resultSet.getInt("senderAddressID"),
-                            resultSet.getInt("receiverAddressID"),
-                            resultSet.getString("licensePlate"),
-                            resultSet.getInt("senderID"),
-                            resultSet.getInt("receiverID"),
-                            resultSet.getInt(("storageID")),
-                            resultSet.getInt("courierID"));
-                }, packageID);
+            return new Package(
+                    resultSet.getInt("packageID"),
+                    resultSet.getInt("weight"),
+                    resultSet.getInt("volume"),
+                    PackageStatus.fromInteger(
+                            resultSet.getInt("status")
+                    ),
+                    getTagsOfPackage(resultSet.getInt("packageID"))
+                    ,
+                    resultSet.getInt("senderAddressID"),
+                    resultSet.getInt("receiverAddressID"),
+                    resultSet.getString("licensePlate"),
+                    resultSet.getInt("senderID"),
+                    resultSet.getInt("receiverID"),
+                    resultSet.getInt(("storageID")),
+                    resultSet.getInt("courierID"));
+        }, packageID);
 
     }
 
@@ -326,7 +327,7 @@ public class PackageDataAccessService implements PackageDao {
     @Override
     public List<PackageDTO> getPackagesFilterByCity(String inputString) {
 
-        inputString = "%"+ inputString +"%";
+        inputString = "%" + inputString + "%";
 
         var sql = """
                 SELECT package.packageID, weight, volume, package.status as package_status,
@@ -362,7 +363,8 @@ public class PackageDataAccessService implements PackageDao {
                 WHERE packageNo = (SELECT max(packageNo) FROM city_number); 
                  """;
 
-        String city = jdbcTemplate.queryForObject(sql, String.class);
+        List<String> cities = jdbcTemplate.queryForList(sql, String.class);
+        String city = cities.get(0);
 
         var sql5 = """
                 WITH logisticUnit_packageNo(logisticUnitName, packageNo) AS 
@@ -411,15 +413,33 @@ public class PackageDataAccessService implements PackageDao {
 
     public List<CourierPackageDTO> getPackagesOfCourier(int courierID) {
         var sql = """
+                SELECT packageID
+                FROM package
+                WHERE courierID = ?
+                AND storageid is not NULL;
+                 """;
+
+        List<Integer> packageIDList = jdbcTemplate.queryForList(sql, Integer.class, courierID);
+
+        var sql2 = """
                 SELECT *
                 FROM step natural join package, address
-                WHERE nextAddressId not in (select prevAddressId from step)
+                WHERE nextAddressId not in (select prevAddressId from step WHERE packageID = ?)
                   AND step.nextAddressID = address.addressID
+                  AND nextaddressid is not NULL
                   AND courierID = ?
+                  AND packageid = ?
                   AND storageid is not NULL;
                  """;
 
-        List<CourierPackageDTO> packageDTOList = jdbcTemplate.query(sql,  new CourierPackageRowMapper(), courierID);
+        List<CourierPackageDTO> packageDTOList = new ArrayList<>();
+        for(int i = 0; i < packageIDList.size(); i++) {
+            CourierPackageDTO pack = jdbcTemplate.queryForObject(sql2,
+                    new CourierPackageRowMapper(),
+                    packageIDList.get(i),
+                    courierID, packageIDList.get(i));
+            packageDTOList.add(pack);
+        }
 
         for (int i = 0; i < packageDTOList.size(); i++) {
             int packageID = packageDTOList.get(i).getPack().getPackageID();
@@ -432,15 +452,30 @@ public class PackageDataAccessService implements PackageDao {
 
     public List<CourierPackageDTO> getPackagesInVehicleOfCourier(int courierID) {
         var sql = """
-                SELECT *
-                FROM step natural join package, vehicle, address
-                WHERE nextAddressId not in (select prevAddressId from step)
-                  AND step.nextAddressID = address.addressID
-                  AND vehicle.licensePlate = package.licensePlate
-                  AND vehicle.courierID = ?;
+                SELECT packageID
+                FROM package
+                WHERE package.courierID = ?
+                AND package.licenseplate is not null
                  """;
 
-        List<CourierPackageDTO> packageDTOList = jdbcTemplate.query(sql, new CourierPackageRowMapper(), courierID);
+        List<Integer> packageIDList = jdbcTemplate.queryForList(sql, Integer.class, courierID);
+
+        var sql2 = """
+                SELECT *
+                FROM step natural join package, address
+                WHERE nextAddressId not in (select prevAddressId from step WHERE packageID = ?)
+                  AND step.nextAddressID = address.addressID
+                  AND packageid = ?;
+                 """;
+
+        List<CourierPackageDTO> packageDTOList = new ArrayList<>();
+        for(int i = 0; i < packageIDList.size(); i++) {
+            CourierPackageDTO pack = jdbcTemplate.queryForObject(sql2,
+                    new CourierPackageRowMapper(),
+                    packageIDList.get(i), packageIDList.get(i));
+            packageDTOList.add(pack);
+        }
+
         for (int i = 0; i < packageDTOList.size(); i++) {
             int packageID = packageDTOList.get(i).getPack().getPackageID();
             List<String> tags = getTagsOfPackage(packageID);
@@ -450,6 +485,7 @@ public class PackageDataAccessService implements PackageDao {
         return packageDTOList;
     }
 }
+
 
 
 

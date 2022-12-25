@@ -58,6 +58,10 @@ public class VehicleService {
         vehicleDao.loadPackageToVehicle(packageID, licensePlate);
     }
 
+    public void removePackageFromVehicle(int packageID) {
+        vehicleDao.removePackageFromVehicle(packageID);
+    }
+
 
 
 }

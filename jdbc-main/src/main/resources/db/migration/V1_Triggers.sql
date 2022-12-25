@@ -24,10 +24,14 @@ END;
 $$;
 
 create trigger storage_volume
-    after update of storageid
+    after insert
     on package
     FOR EACH ROW
     EXECUTE FUNCTION updateVolume();
 
-
+create trigger storage_volume_update
+    after update of storageid
+    on package
+    FOR EACH ROW
+EXECUTE FUNCTION updateVolume();
 

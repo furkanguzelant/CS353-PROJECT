@@ -78,4 +78,5 @@ public class PackageService {
     public List<CourierPackageDTO> getPackagesInVehicleOfCourier(int courierID) {
         return packageDao.getPackagesInVehicleOfCourier(courierID);
     }
+
 }

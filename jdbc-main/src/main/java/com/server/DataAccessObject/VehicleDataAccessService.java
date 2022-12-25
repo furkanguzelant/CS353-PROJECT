@@ -206,9 +206,44 @@ public class VehicleDataAccessService implements VehicleDao {
                 SET licensePlate = ?, storageID = NULL
                 WHERE packageID = ?
                  """;
-        // TODO trigger for storage -> decrease current volume
-        // TODO trigger for vehicle -> increase current weight
 
         jdbcTemplate.update(sql, licensePlate, packageID);
+
+        var sql2 = """
+                UPDATE vehicle
+                SET currentWeight = currentWeight + (SELECT weight FROM package WHERE packageID = ?), status = ?
+                WHERE licensePlate = ?
+                 """;
+
+        jdbcTemplate.update(sql2, packageID, VehicleStatus.Busy.ordinal(), licensePlate);
+    }
+
+    public void removePackageFromVehicle(int packageID) {
+
+        var sql2 = """
+                UPDATE vehicle
+                SET currentWeight = currentWeight - (SELECT weight FROM package WHERE packageID = ?)
+                WHERE licensePlate = (SELECT licensePlate FROM package WHERE packageID = ?)
+                 """;
+
+        jdbcTemplate.update(sql2, packageID, packageID);
+
+        var sql3 = """
+                UPDATE vehicle
+                SET status = ? 
+                WHERE licensePlate = (SELECT licensePlate FROM package WHERE packageID = ?)
+                AND currentWeight = 0
+                 """;
+
+        jdbcTemplate.update(sql3, VehicleStatus.Available.ordinal(), packageID);
+
+        var sql = """
+                UPDATE package
+                SET licensePlate = NULL
+                WHERE packageID = ?
+                 """;
+        jdbcTemplate.update(sql, packageID);
+
+
     }
 }

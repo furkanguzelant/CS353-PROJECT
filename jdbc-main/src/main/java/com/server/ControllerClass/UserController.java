@@ -26,7 +26,7 @@ public class UserController {
         this.addressService = addressService;
     }
 
-    @PostMapping(path="createUser/customer")
+    @PostMapping(path = "createUser/customer")
     public ResponseEntity<Map<String, Object>> addCustomer(@RequestBody CustomerDTO customerDTO) {
         try {
             int customerID = userService.addCustomer(customerDTO.customer);
@@ -42,30 +42,25 @@ public class UserController {
 
     }
 
-    @PostMapping(path="createUser/regCustomer")
+    @PostMapping(path = "createUser/regCustomer")
     public void addRegisteredCustomer(@RequestBody RegisteredCustomer registeredCustomer) {
         userService.addRegisteredCustomer(registeredCustomer);
     }
 
-    @GetMapping(path="getUser/customer")
+    @GetMapping(path = "getUser/customer")
     public List<User> getCustomers() {
         return userService.getCustomers();
     }
 
-    @PostMapping(path="createUser/staff")
-    public ResponseEntity<Map<String, Object>> addStaff (@RequestHeader("access-token") String accessToken, @RequestBody Staff staff) {
+    @PostMapping(path = "createUser/staff")
+    public ResponseEntity<Map<String, Object>> addStaff(@RequestBody Staff staff) {
         try {
-            if (AuthorizationService.getInstance().verifyTokenAsAdmin( accessToken )){
-                if(staff.getType().equals("E")) {
-                    userService.createEmployee((Employee) staff);
-                }
-                else {
-                    userService.createCourier((Courier) staff);
-                }
-                return new ResponseEntity<>(Map.of("statusMessage", "Staff is successfully created"), HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(Map.of("statusMessage", "Unauthorized"), HttpStatus.UNAUTHORIZED);
+            if (staff.getType().equals("E")) {
+                userService.createEmployee((Employee) staff);
+            } else {
+                userService.createCourier((Courier) staff);
             }
+            return new ResponseEntity<>(Map.of("statusMessage", "Staff is successfully created"), HttpStatus.OK);
         } catch (JWTDecodeException exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(Map.of("statusMessage", "Invalid token"), HttpStatus.BAD_REQUEST);

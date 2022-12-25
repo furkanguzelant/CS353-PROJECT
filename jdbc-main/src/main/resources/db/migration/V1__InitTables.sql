@@ -400,3 +400,12 @@ WHERE nextAddressId not in (select prevAddressId from step)
   AND step.nextAddressID = address.addressID
   AND vehicle.licensePlate = package.licensePlate
   AND vehicle.courierID = 2;
+
+
+SELECT *
+FROM step natural join package, address
+WHERE nextAddressId not in (select prevAddressId from step WHERE packageID = ?)
+  AND step.nextAddressID = address.addressID
+  AND packageID = ?;
+
+select packageID, prevAddressId from (SELECT * FROM step natural join package WHERE courierID = ?) as foo;

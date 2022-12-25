@@ -3,6 +3,7 @@ package com.server.ControllerClass;
 import com.server.DTO.CourierPackageDTO;
 import com.server.DTO.PackageDTO;
 import com.server.DTO.PackageStatisticsInfo;
+import com.server.Enums.PackageStatus;
 import com.server.Enums.ProcessType;
 import com.server.ModelClass.*;
 import com.server.ModelClass.LogisticUnits.LogisticUnit;
@@ -28,16 +29,19 @@ public class PackageController {
     private final PaymentService paymentService;
     private final StepService stepService;
     private final LogisticUnitService logisticUnitService;
+    private final VehicleService vehicleService;
 
     public PackageController(PackageService packageService, AddressService addressService,
                              PaymentService paymentService, StepService stepService,
-                             LogisticUnitService logisticUnitService, StorageService storageService) {
+                             LogisticUnitService logisticUnitService, StorageService storageService,
+                             VehicleService vehicleService) {
         this.packageService = packageService;
         this.addressService = addressService;
         this.paymentService = paymentService;
         this.stepService = stepService;
         this.logisticUnitService = logisticUnitService;
         this.storageService = storageService;
+        this.vehicleService = vehicleService;
     }
 
     @PostMapping("/insertPackage")
@@ -204,6 +208,18 @@ public class PackageController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Map.of("statusMessage", "Fetching package failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/confirmDelivery")
+    public ResponseEntity<Map<String, Object>> confirmDelivery(int packageID) {
+        try {
+            packageService.updatePackageStatus(packageID, PackageStatus.Delivered.ordinal());
+            vehicleService.removePackageFromVehicle(packageID);
+            return new ResponseEntity<>(Map.of("statusMessage", "Package status updated successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Package status update failed"), HttpStatus.BAD_REQUEST);
         }
     }
 
