@@ -8,11 +8,6 @@ import java.util.Optional;
 public interface ComplaintDao {
 
     void insertComplaint(Complaint complaint);
-
-    List<Complaint> selectAllComplaints();
-
-    Optional<Complaint> getComplaintById(int complaintID);
-
-    Optional<Complaint> getComplaintByPackageId(int packageID);
-
+    List<Complaint> getComplaints();
+    void deleteComplaint(int complaintID);
 }

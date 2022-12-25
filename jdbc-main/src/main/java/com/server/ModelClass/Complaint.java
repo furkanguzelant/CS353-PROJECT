@@ -1,21 +1,31 @@
 package com.server.ModelClass;
 
+import com.server.Enums.ComplaintType;
+
 public class Complaint {
 
-    enum Type {BrokenPackage, LatePackage, LostPackage}
-
-    private int ComplaintID;
+    private int complaintID;
     private int packageID;
     private int registeredCustomerID;
-    private Type typeOfComplaint;
+    private ComplaintType typeOfComplaint;
     private String message;
+
+    public Complaint() {
+    }
 
     public Complaint(int complaintID,
                      int packageID,
                      int registeredCustomerID,
-                     Type typeOfComplaint,
+                     ComplaintType typeOfComplaint,
                      String message) {
-        ComplaintID = complaintID;
+        this.complaintID = complaintID;
+        this.packageID = packageID;
+        this.registeredCustomerID = registeredCustomerID;
+        this.typeOfComplaint = typeOfComplaint;
+        this.message = message;
+    }
+
+    public Complaint(int packageID, int registeredCustomerID, ComplaintType typeOfComplaint, String message) {
         this.packageID = packageID;
         this.registeredCustomerID = registeredCustomerID;
         this.typeOfComplaint = typeOfComplaint;
@@ -23,11 +33,11 @@ public class Complaint {
     }
 
     public int getComplaintID() {
-        return ComplaintID;
+        return complaintID;
     }
 
     public void setComplaintID(int complaintID) {
-        ComplaintID = complaintID;
+        complaintID = complaintID;
     }
 
     public int getPackageID() {
@@ -46,11 +56,11 @@ public class Complaint {
         this.registeredCustomerID = registeredCustomerID;
     }
 
-    public Type getTypeOfComplaint() {
+    public ComplaintType getTypeOfComplaint() {
         return typeOfComplaint;
     }
 
-    public void setTypeOfComplaint(Type typeOfComplaint) {
+    public void setTypeOfComplaint(ComplaintType typeOfComplaint) {
         this.typeOfComplaint = typeOfComplaint;
     }
 
