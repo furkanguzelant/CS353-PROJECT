@@ -11,6 +11,14 @@ BEGIN
                                          FROM package p
                                          WHERE NEW.packageid = p.packageid)
     WHERE storageid = NEW.storageid;
+
+    if OLD.storageid is not null then
+        UPDATE storage
+        SET currentvolume = currentvolume - (SELECT volume
+                                             FROM package p
+                                             WHERE OLD.packageid = p.packageid)
+        WHERE storageid = OLD.storageid;
+    end if;
     RETURN NEW;
 END;
 $$;
