@@ -1,5 +1,6 @@
 package com.server.DataAccessObject;
 
+import com.server.DTO.CourierPackageDTO;
 import com.server.DTO.PackageDTO;
 import com.server.DTO.PackageStatisticsInfo;
 import com.server.Enums.*;
@@ -7,6 +8,7 @@ import com.server.ModelClass.Address;
 import com.server.ModelClass.Package;
 import com.server.ModelClass.Payment;
 import com.server.ModelClass.Step;
+import com.server.RowMappers.CourierPackageRowMapper;
 import com.server.RowMappers.EmployeePackageDTORowMapper;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -405,6 +407,47 @@ public class PackageDataAccessService implements PackageDao {
         statisticsInfo.setNumberOfPackageInDistribution(inDistribution);
         statisticsInfo.setNumberOfPackageInBranch(inBranch);
         return statisticsInfo;
+    }
+
+    public List<CourierPackageDTO> getPackagesOfCourier(int courierID) {
+        var sql = """
+                SELECT *
+                FROM step natural join package, address
+                WHERE nextAddressId not in (select prevAddressId from step)
+                  AND step.nextAddressID = address.addressID
+                  AND courierID = ?
+                  AND storageid is not NULL;
+                 """;
+
+        List<CourierPackageDTO> packageDTOList = jdbcTemplate.query(sql,  new CourierPackageRowMapper(), courierID);
+
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+
+        return packageDTOList;
+    }
+
+    public List<CourierPackageDTO> getPackagesInVehicleOfCourier(int courierID) {
+        var sql = """
+                SELECT *
+                FROM step natural join package, vehicle, address
+                WHERE nextAddressId not in (select prevAddressId from step)
+                  AND step.nextAddressID = address.addressID
+                  AND vehicle.licensePlate = package.licensePlate
+                  AND vehicle.courierID = ?;
+                 """;
+
+        List<CourierPackageDTO> packageDTOList = jdbcTemplate.query(sql, new CourierPackageRowMapper(), courierID);
+        for (int i = 0; i < packageDTOList.size(); i++) {
+            int packageID = packageDTOList.get(i).getPack().getPackageID();
+            List<String> tags = getTagsOfPackage(packageID);
+            packageDTOList.get(i).getPack().setTags(tags);
+        }
+
+        return packageDTOList;
     }
 }
 

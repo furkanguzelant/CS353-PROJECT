@@ -1,5 +1,6 @@
 package com.server.DataAccessObject;
 
+import com.server.DTO.CourierPackageDTO;
 import com.server.DTO.PackageDTO;
 import com.server.DTO.PackageStatisticsInfo;
 import com.server.ModelClass.Package;
@@ -30,4 +31,6 @@ public interface PackageDao {
 
     List<PackageDTO> getPackagesFilterByCity(String inputString);
     PackageStatisticsInfo getPackageStatistics();
+    List<CourierPackageDTO> getPackagesOfCourier(int courierID);
+    List<CourierPackageDTO> getPackagesInVehicleOfCourier(int courierID);
 }

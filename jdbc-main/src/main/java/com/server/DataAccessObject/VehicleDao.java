@@ -18,13 +18,15 @@ public interface VehicleDao {
 
     void addPackageToVehicle(int packageID, String licensePlate);
 
-    Optional<Vehicle> getVehicleFromCourierID(int courierID);
+    Vehicle getVehicleFromCourierID(int courierID);
 
     void assignVehicleToCourier(String licensePlate, int courierID);
 
     List<Package> getPackagesOfCourierInsideVehicle(int courierID);
 
     List<Vehicle> getVehiclesOfLogisticUnit(int logisticUnitID);
+
+    void loadPackageToVehicle(int packageID, String licensePlate);
 
 
 

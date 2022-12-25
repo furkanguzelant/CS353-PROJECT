@@ -60,7 +60,7 @@ public class VehicleController {
     }
 
     @GetMapping(path ="getVehicleFromCourierID" )
-    Optional<Vehicle> getVehicleFromCourierID(int courierID){
+    Vehicle getVehicleFromCourierID(int courierID){
         return vehicleService.getVehicleFromCourierID(courierID);
     }
 
@@ -89,6 +89,19 @@ public class VehicleController {
         } catch (Exception exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(Map.of("statusMessage", "Vehicle is not empty"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/loadPackageTOVehicle")
+    public ResponseEntity<Map<String, Object>> loadPackageToVehicle(int packageID, int courierID) {
+        try {
+            Vehicle vehicle = vehicleService.getVehicleFromCourierID(courierID);
+            vehicleService.loadPackageToVehicle(packageID, vehicle.getLicensePlate());
+            return new ResponseEntity<>(Map.of("statusMessage", "Package " + packageID +
+                            " loaded to vehicle " + vehicle.getLicensePlate()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Package could not be loaded"), HttpStatus.BAD_REQUEST);
         }
     }
 }

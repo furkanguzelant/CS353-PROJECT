@@ -124,6 +124,8 @@ create table vehicle
     FOREIGN KEY (addressID) REFERENCES address (addressID)
 );
 
+ALTER TABLE vehicle ADD UNIQUE (courierID);
+
 create table storage
 (
     storageID      SERIAL,
@@ -392,4 +394,9 @@ INSERT INTO complaint(userID, packageID, type, message)
 values (4, currval('package_packageid_seq'), 2, 'Paketim nerde, noluyor yahu !?');
 
 
-
+SELECT *
+FROM step natural join package, vehicle, address
+WHERE nextAddressId not in (select prevAddressId from step)
+  AND step.nextAddressID = address.addressID
+  AND vehicle.licensePlate = package.licensePlate
+  AND vehicle.courierID = 2;

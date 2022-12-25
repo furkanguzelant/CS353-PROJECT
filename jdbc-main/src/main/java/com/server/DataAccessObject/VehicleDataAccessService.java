@@ -110,7 +110,7 @@ public class VehicleDataAccessService implements VehicleDao {
     }
 
     @Override
-    public Optional<Vehicle> getVehicleFromCourierID(int courierID) {
+    public Vehicle getVehicleFromCourierID(int courierID) {
 
         var sql = """
                 SELECT *
@@ -118,21 +118,30 @@ public class VehicleDataAccessService implements VehicleDao {
                 WHERE courierID = ?
                  """;
 
-        return jdbcTemplate.query(sql, new VehicleRowMapper(), courierID)
-                .stream()
-                .findFirst();
+        return jdbcTemplate.queryForObject(sql, new VehicleRowMapper(), courierID);
     }
 
     @Override
     public void assignVehicleToCourier(String licensePlate, int courierID) {
         String sql = """
                  UPDATE vehicle
+                 SET courierID = NULL
+                 WHERE courierID = ? AND currentWeight = 0
+                 """;
+
+        jdbcTemplate.update(
+                sql,
+                courierID
+        );
+
+        String sql2 = """
+                 UPDATE vehicle
                  SET courierID = ?
                  WHERE licensePlate = ? AND currentWeight = 0
                  """;
 
         jdbcTemplate.update(
-                sql,
+                sql2,
                 courierID,
                 licensePlate
         );
@@ -190,7 +199,16 @@ public class VehicleDataAccessService implements VehicleDao {
         return jdbcTemplate.query(sql, new VehicleRowMapper(), logisticUnitID);
     }
 
+    public void loadPackageToVehicle(int packageID, String licensePlate) {
 
+        var sql = """
+                UPDATE package
+                SET licensePlate = ?, storageID = NULL
+                WHERE packageID = ?
+                 """;
+        // TODO trigger for storage -> decrease current volume
+        // TODO trigger for vehicle -> increase current weight
 
-
+        jdbcTemplate.update(sql, licensePlate, packageID);
+    }
 }

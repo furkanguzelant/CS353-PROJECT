@@ -1,5 +1,6 @@
 package com.server.ControllerClass;
 
+import com.server.DTO.CourierPackageDTO;
 import com.server.DTO.PackageDTO;
 import com.server.DTO.PackageStatisticsInfo;
 import com.server.Enums.ProcessType;
@@ -179,6 +180,30 @@ public class PackageController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Map.of("statusMessage", "Fetching package statistics failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getPackagesOfCourier")
+    public ResponseEntity<Map<String, Object>> getPackagesOfCourier(int courierID) {
+        try {
+            List<CourierPackageDTO> packageInfo = packageService.getPackagesOfCourier(courierID);
+            return new ResponseEntity<>(Map.of("statusMessage", "Packages fetched successfully",
+                    "packageInfo", packageInfo), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetching package failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getPackagesInVehicleOfCourier")
+    public  ResponseEntity<Map<String, Object>> getPackagesInVehicleOfCourier(int courierID) {
+        try {
+            List<CourierPackageDTO> packageInfo = packageService.getPackagesInVehicleOfCourier(courierID);
+            return new ResponseEntity<>(Map.of("statusMessage", "Packages fetched successfully",
+                    "packageInfo", packageInfo), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Map.of("statusMessage", "Fetching package failed"), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.server.ServiceClass;
 
+import com.server.DTO.CourierPackageDTO;
 import com.server.DTO.PackageDTO;
 import com.server.DTO.PackageStatisticsInfo;
 import com.server.DataAccessObject.PackageDao;
@@ -68,5 +69,13 @@ public class PackageService {
 
     public PackageStatisticsInfo getPackageStatistics() {
         return packageDao.getPackageStatistics();
+    }
+
+    public List<CourierPackageDTO> getPackagesOfCourier(int courierID) {
+        return packageDao.getPackagesOfCourier(courierID);
+    }
+
+    public List<CourierPackageDTO> getPackagesInVehicleOfCourier(int courierID) {
+        return packageDao.getPackagesInVehicleOfCourier(courierID);
     }
 }
